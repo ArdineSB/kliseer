@@ -1,0 +1,44 @@
+/* Kliseer tokens · Mode 1 */
+:root {
+  --surface-shell: #F2F2F4;
+  --surface-canvas: #FFFFFF;
+  --surface-subtle: #F6F8FA;
+  --surface-muted: #F1F2F5;
+  --surface-footer: #FCFCFD;
+  --surface-note: #FAFAFB;
+  --text-primary: #202431;
+  --text-label: #434A57;
+  --text-secondary: #5F6673;
+  --text-muted: #666D7A;
+  --text-brand: #302B49;
+  --nav-text: #3F4552;
+  --border-default: #E5E7EB;
+  --border-input: #DADDE5;
+  --border-row: #EDF0F3;
+  --border-step-done: #D4D0E8;
+  --action-primary: #6D28D9;
+  --action-primary-subtle: #C4B5FD;
+  --action-disabled-bg: #EDE9FE;
+  --action-disabled-text: #6B5FA0;
+  --selection-border: #8B5CF6;
+  --navigation-active-bg: #F3ECFF;
+  --chat-assistant: #F5F0FF;
+  --chat-typing: #A78BFA;
+  --skeleton-accent: #EEEAF8;
+  --status-success: #207B55;
+  --status-error: #B42318;
+  --status-error-strong: #7A271A;
+  --status-error-bg: #FDECEC;
+  --status-error-surface: #FEF3F2;
+  --status-error-border: #F3B8B3;
+  --tier-s-bg: #E8F5EE;
+  --tier-a-bg: #EAF2FC;
+  --tier-a-text: #2868A8;
+  --tier-b-bg: #FFF3E0;
+  --tier-b-text: #A05F11;
+  --tier-neutral-bg: #F0F1F4;
+  --tier-neutral-text: #686C78;
+  --action-primary-hover: #5B21B6;
+  --focus-ring: #6D28D9;
+  --navigation-hover-bg: #E9E9EE;
+}

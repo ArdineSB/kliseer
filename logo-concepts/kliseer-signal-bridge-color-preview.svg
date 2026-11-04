@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="640" height="640" role="img" aria-labelledby="title">
+  <title id="title">Kliseer Signal Bridge color preview</title>
+  <rect width="640" height="640" fill="#F3F4F6"/>
+  <text x="44" y="72" fill="#202431" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Kliseer · Signal Bridge</text>
+  <text x="44" y="108" fill="#5F6673" font-family="Inter, Arial, sans-serif" font-size="16">White mark on Kliseer purple · #6D28D9</text>
+  <g transform="translate(220 158) scale(.78)">
+    <rect x="0" y="0" width="256" height="256" rx="64" fill="#6D28D9"/>
+    <g fill="none" stroke="#FFFFFF" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M46 160 94 112h48l54-54"/>
+      <path d="M46 96 94 144h48l54 54"/>
+    </g>
+  </g>
+  <rect x="44" y="390" width="552" height="160" rx="24" fill="#6D28D9"/>
+  <g transform="translate(76 430) scale(.34)" fill="none" stroke="#FFFFFF" stroke-width="25" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 158 88 112h46l52-52"/>
+    <path d="M42 98 88 144h46l52 52"/>
+  </g>
+  <text x="200" y="494" fill="#FFFFFF" font-family="Manrope, Arial, sans-serif" font-size="52" font-weight="600" letter-spacing="-0.5">Kliseer</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">K-Window symbol concept for Kliseer</title>
+  <g id="symbol" fill="#000000">
+    <rect x="40" y="32" width="44" height="192" rx="22"/>
+    <path d="M84 112 172 32h44l-88 96 88 96h-44l-88-80z"/>
+  </g>
+</svg>

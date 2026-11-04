@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" width="760" height="440" role="img" aria-labelledby="title">
+  <title id="title">Kliseer mark size test</title>
+  <rect width="760" height="440" fill="#fff"/>
+  <text x="32" y="38" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#111">Symbol size test · true pixel sizes</text>
+  <g font-family="Inter, Arial, sans-serif" font-size="14" fill="#5f6673">
+    <text x="32" y="90">K-Window</text><text x="32" y="168">Signal Bridge</text><text x="32" y="246">Open Grid</text>
+    <text x="468" y="62">64 px</text><text x="568" y="62">32 px</text><text x="648" y="62">16 px</text>
+  </g>
+  <g fill="#000">
+    <g transform="translate(468 72) scale(.25)"><rect x="40" y="32" width="44" height="192" rx="22"/><path d="M84 112 172 32h44l-88 96 88 96h-44l-88-80z"/></g>
+    <g transform="translate(568 88) scale(.125)"><rect x="40" y="32" width="44" height="192" rx="22"/><path d="M84 112 172 32h44l-88 96 88 96h-44l-88-80z"/></g>
+    <g transform="translate(648 96) scale(.0625)"><rect x="40" y="32" width="44" height="192" rx="22"/><path d="M84 112 172 32h44l-88 96 88 96h-44l-88-80z"/></g>
+    <g transform="translate(468 150) scale(.25)" fill="none" stroke="#000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><path d="M36 164 92 108h52l56-56"/><path d="M36 92 92 148h52l56 56"/></g>
+    <g transform="translate(568 166) scale(.125)" fill="none" stroke="#000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><path d="M36 164 92 108h52l56-56"/><path d="M36 92 92 148h52l56 56"/></g>
+    <g transform="translate(648 174) scale(.0625)" fill="none" stroke="#000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><path d="M36 164 92 108h52l56-56"/><path d="M36 92 92 148h52l56 56"/></g>
+    <g transform="translate(468 228) scale(.25)"><rect x="36" y="36" width="76" height="32" rx="16"/><rect x="36" y="36" width="32" height="76" rx="16"/><rect x="144" y="36" width="76" height="32" rx="16"/><rect x="188" y="36" width="32" height="76" rx="16"/><rect x="36" y="188" width="76" height="32" rx="16"/><rect x="36" y="144" width="32" height="76" rx="16"/><rect x="144" y="188" width="76" height="32" rx="16"/><rect x="188" y="144" width="32" height="76" rx="16"/><rect x="112" y="112" width="32" height="32" rx="8"/></g>
+    <g transform="translate(568 244) scale(.125)"><rect x="36" y="36" width="76" height="32" rx="16"/><rect x="36" y="36" width="32" height="76" rx="16"/><rect x="144" y="36" width="76" height="32" rx="16"/><rect x="188" y="36" width="32" height="76" rx="16"/><rect x="36" y="188" width="76" height="32" rx="16"/><rect x="36" y="144" width="32" height="76" rx="16"/><rect x="144" y="188" width="76" height="32" rx="16"/><rect x="188" y="144" width="32" height="76" rx="16"/><rect x="112" y="112" width="32" height="32" rx="8"/></g>
+    <g transform="translate(648 252) scale(.0625)"><rect x="36" y="36" width="76" height="32" rx="16"/><rect x="36" y="36" width="32" height="76" rx="16"/><rect x="144" y="36" width="76" height="32" rx="16"/><rect x="188" y="36" width="32" height="76" rx="16"/><rect x="36" y="188" width="76" height="32" rx="16"/><rect x="36" y="144" width="32" height="76" rx="16"/><rect x="144" y="188" width="76" height="32" rx="16"/><rect x="188" y="144" width="32" height="76" rx="16"/><rect x="112" y="112" width="32" height="32" rx="8"/></g>
+  </g>
+  <text x="32" y="414" font-family="Inter, Arial, sans-serif" font-size="13" fill="#5f6673">Scale review: Open Grid’s central aperture and Signal Bridge’s crossing approach minimum detail at 16 px.</text>
+</svg>

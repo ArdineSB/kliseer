@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 256" width="920" height="256" role="img" aria-labelledby="title">
+  <title id="title">Kliseer Signal Bridge horizontal logo on purple</title>
+  <rect id="background" x="0" y="0" width="920" height="256" rx="32" fill="#6D28D9"/>
+  <g id="symbol" fill="none" stroke="#FFFFFF" stroke-width="25" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 158 88 112h46l52-52"/>
+    <path d="M42 98 88 144h46l52 52"/>
+  </g>
+  <text id="wordmark" x="252" y="160" fill="#FFFFFF" font-family="Manrope, Arial, sans-serif" font-size="76" font-weight="600" letter-spacing="-0.5">Kliseer</text>
+</svg>

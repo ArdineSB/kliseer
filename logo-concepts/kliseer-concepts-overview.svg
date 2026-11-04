@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-labelledby="title">
+  <title id="title">KLISEER logo concepts overview</title>
+  <rect width="1200" height="900" fill="#ffffff"/>
+  <text x="72" y="72" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">KLISEER — concept directions</text>
+  <text x="72" y="108" fill="#6b7280" font-family="Inter, Arial, sans-serif" font-size="16">Black-and-white first pass · symbol + exploratory wordmark</text>
+  <g transform="translate(72 150)">
+    <rect width="1056" height="190" rx="20" fill="#ffffff" stroke="#e5e7eb" stroke-width="2"/>
+    <g transform="translate(34 18) scale(.6)">
+      <rect x="40" y="32" width="44" height="192" rx="22" fill="#000"/>
+      <path d="M84 112 172 32h44l-88 96 88 96h-44l-88-80z" fill="#000"/>
+    </g>
+    <text x="190" y="64" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">A — K-Window · RECOMMENDED</text>
+    <text x="190" y="98" fill="#5f6673" font-family="Inter, Arial, sans-serif" font-size="17">Open K: a compact identifier for filtering and finding fit.</text>
+    <text x="190" y="145" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="650" letter-spacing="-2">KLISEER</text>
+  </g>
+  <g transform="translate(72 365)">
+    <rect width="1056" height="190" rx="20" fill="#ffffff" stroke="#e5e7eb" stroke-width="2"/>
+    <g transform="translate(34 18) scale(.6)" fill="none" stroke="#000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M36 164 92 108h52l56-56"/>
+      <path d="M36 92 92 148h52l56 56"/>
+    </g>
+    <text x="190" y="64" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">B — Signal Bridge</text>
+    <text x="190" y="98" fill="#5f6673" font-family="Inter, Arial, sans-serif" font-size="17">Two paths converge: signals become a qualified connection.</text>
+    <text x="190" y="145" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="650" letter-spacing="-2">KLISEER</text>
+  </g>
+  <g transform="translate(72 580)">
+    <rect width="1056" height="190" rx="20" fill="#ffffff" stroke="#e5e7eb" stroke-width="2"/>
+    <g transform="translate(34 18) scale(.6)" fill="#000">
+      <rect x="36" y="36" width="76" height="32" rx="16"/><rect x="36" y="36" width="32" height="76" rx="16"/>
+      <rect x="144" y="36" width="76" height="32" rx="16"/><rect x="188" y="36" width="32" height="76" rx="16"/>
+      <rect x="36" y="188" width="76" height="32" rx="16"/><rect x="36" y="144" width="32" height="76" rx="16"/>
+      <rect x="144" y="188" width="76" height="32" rx="16"/><rect x="188" y="144" width="32" height="76" rx="16"/>
+      <rect x="112" y="112" width="32" height="32" rx="8"/>
+    </g>
+    <text x="190" y="64" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">C — Open Grid</text>
+    <text x="190" y="98" fill="#5f6673" font-family="Inter, Arial, sans-serif" font-size="17">A modular aperture: structured data with room for discovery.</text>
+    <text x="190" y="145" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="650" letter-spacing="-2">KLISEER</text>
+  </g>
+</svg>

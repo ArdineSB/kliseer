@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 256" width="860" height="256" role="img" aria-labelledby="title">
+  <title id="title">Signal Bridge Kliseer lockup concept</title>
+  <g id="symbol" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 164 92 108h52l56-56"/>
+    <path d="M36 92 92 148h52l56 56"/>
+  </g>
+  <text id="wordmark" x="256" y="160" fill="#000000" font-family="Inter, Arial, sans-serif" font-size="78" font-weight="650" letter-spacing="-2">KLISEER</text>
+</svg>

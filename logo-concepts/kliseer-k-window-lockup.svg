@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 256" width="860" height="256" role="img" aria-labelledby="title">
+  <title id="title">K-Window Kliseer lockup concept</title>
+  <g id="symbol" fill="#000000">
+    <rect x="32" y="32" width="44" height="192" rx="22"/>
+    <path d="M76 112 164 32h44l-88 96 88 96h-44l-88-80z"/>
+  </g>
+  <text id="wordmark" x="256" y="160" fill="#000000" font-family="Inter, Arial, sans-serif" font-size="78" font-weight="650" letter-spacing="-2">KLISEER</text>
+</svg>
