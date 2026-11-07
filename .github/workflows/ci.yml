@@ -28,7 +28,7 @@ jobs:
       - name: Check tier rules
         run: npm run check
       - name: Typecheck
-        run: npx tsc --noEmit -p .
+        run: npx next typegen && npx tsc --noEmit -p .
       - name: Lint
         run: npm run lint
       - name: Build
