@@ -1,25 +1,30 @@
 # Belum diputuskan
 
-Urut dari yang paling mendesak. Kickoff 3 Nov 2026, 15:00Z.
+Diperbarui 7 Nov 2026. Kickoff 3 Nov 2026, 15:00Z. Deadline submit 8 Nov 2026 22:00 UTC.
 
-1. **Sumber sinyal: konflik antara "tambah sebanyak-banyaknya" dan keputusan lama.** Memory menyebut SEC EDGAR dan Chicago tidak dibangun di window hackathon. INAPROC dan UK tender di luar US, jadi tidak relevan. Pilih: ikut memory, atau ikut jawaban baru user.
-2. **Data real atau sintetis untuk demo.** User minta data real. Memory (D4, D13) mengunci sinyal Phase 2 dan kontak Phase 4 sebagai seed sintetis berlabel. Pilih: sinyal real dari sumber publik dengan kontak sintetis, atau semua sintetis.
-3. **Hunter: Free dengan cache, atau Starter.** Belum dijawab user. Angka 50 kredit per bulan dari pihak ketiga, belum dicek di hunter.io/pricing. Ketentuan Free untuk layanan yang dipakai juri juga belum dicek.
-4. **Perusahaan kedua di demo.** User bilang boleh dua perusahaan. Belum jelas apakah yang kedua seller non-electrical atau prospect tambahan, dan namanya belum ada.
-5. **LinkedIn, termasuk versi opsional.** Posisi asisten: tidak dibangun, dan tidak ada koneksi akun LinkedIn. User sudah dua kali meminta (ekstensi, lalu versi opsional). User belum menerima atau menolak secara tertulis. Ini menyangkut ToS dan risiko akun, jadi perlu keputusan eksplisit.
-6. **theHarvester.** Posisi asisten: tidak dipakai sebagai sumber kontak. Belum dikonfirmasi user.
-7. **Jalur kontak tanpa LinkedIn.** Usulan: input manual dengan URL sumber, CSV dari CRM, cache Hunter, dan halaman team publik. Belum disetujui user.
-8. **Figcraft atau Sokudo untuk build.** User mungkin tidak memakai Sokudo untuk build. Belum diputuskan.
-9. **Data requirements dari gambar.** Gambar yang dikirim user tidak terbaca. Perlu teks atau foto ulang.
-10. **Flow spec.** Belum ditulis. User minta dibahas dulu. Playbook menyusul setelah flow disetujui.
-11. **Prompt untuk Figcraft.** User minta asisten menyusun prompt desain. Layar yang dibutuhkan: Home, Background, Prospects, detail prospect, Signals, ICP. Tiap layar punya state kosong, loading, dan error.
-12. **Pertanyaan chat Background.** 6 sampai 8 pertanyaan untuk mengisi profil seller belum disusun.
-13. **Aturan scoring.** Usulan asisten: dua sinyal searah minimum, dengan jendela 90 hari. Memory juga punya aturan Kliseer: HOT, WARM, COLD, lag kontak 180 hari, dan 45 hari untuk catatan equipment-supply. Pilih: pakai aturan Kliseer, atau aturan baru.
-14. **Model Vultr.** Daftar model harus dicek live. Dokumen KB sudah usang (`/v1/chat/models` 404). Kandidat: glm-5.3, glm-5.3-flash, mimo-v2.6-pro. API key Fireworks belum ada.
-15. **Aturan lablab.** Belum dicek: hak organizer atas konten submission, batas karakter form (default title 5–50, short 50–255, long 600–2000, belum diverifikasi di form live), dan apakah repo baru saat kickoff sesuai aturan.
-16. **Angka tryclean "75 sinyal dalam 8 kategori".** Belum diverifikasi di halaman.
-17. **Nama dua feed permit kota.** KB menyebut dua feed kota menjawab panggilan live, tanpa nama. Perlu dicatat di `sources.md`.
-18. **Sumber pertama yang diuji di scratch.** Belum dipilih. NYC SODA (`rbx6-tga4`) sudah tervalidasi di riset sebelumnya.
+Yang sudah dijawab dipindah ke `decisions.md` dan tidak lagi ditulis di sini.
 
-
-19. **Aturan tier S, A, B, C.** User minta tab Seer memakai tier, bukan temperature. Aturan penentuan tier per huruf belum ada. Engine Phase 3 memakai HOT, WARM, COLD, unknown. Pilih: tier sebagai label UI yang dipetakan dari temperature, atau tier dihitung dengan aturan baru.
+1. ~~Sumber sinyal: konflik "tambah sebanyak-banyaknya" vs keputusan lama~~ **Dijawab (G10, 7 Nov):** freeze di 4 sumber live. Tambah hanya setelah hackathon.
+2. ~~Data real atau sintetis untuk demo~~ **Dijawab (Q18, 7 Nov):** data real, tanpa sintetis. Revisi Q18 (tanpa sensor) dikonfirmasi user 7 Nov.
+3. ~~Hunter: Free dengan cache, atau Starter~~ **Dijawab (7 Nov):** tidak keduanya. Akun Free terukur 50 search credit/bulan. Uji 3 domain C5 gagal sebagai sumber default. Lihat `sources.md` C3.
+4. ~~Perusahaan kedua di demo~~ **Dibatalkan (user, 7 Nov):** tidak usah.
+5. ~~LinkedIn access path~~ **Dijawab (Q17, 7 Nov):** link manual tanpa extension. Akses resmi dibangun ulang hanya kalau LinkedIn memberi izin tertulis atau API.
+6. **theHarvester.** Masih terbuka. Posisi asisten: tidak dipakai sebagai sumber kontak.
+7. ~~Jalur kontak tanpa LinkedIn~~ **Dijawab (Q7, 7 Nov):** input manual, CSV dari CRM, Jina crawl (Step A), direktori publik (Step C). Cache Hunter belum diputuskan (lihat 3).
+8. ~~Figcraft atau Sokudo~~ **Dijawab (Q13, 7 Nov):** FigCraft via MCP, user review di canvas.
+9. **Data requirements dari gambar.** Masih terbuka. Gambar yang dikirim tidak terbaca; perlu teks atau foto ulang.
+10. **Flow spec.** Masih terbuka. Ditulis di `KLISEER_BUILD_PLAN_2.md`, perlu persetujuan user.
+11. **Prompt untuk Figcraft.** Masih terbuka. Layar sudah dirinci di `KLISEER_BUILD_PLAN_2.md`; prompt belum disusun.
+12. **Pertanyaan chat Background.** Masih terbuka. 6 sampai 8 pertanyaan belum disusun.
+13. ~~Aturan scoring~~ **Dijawab (G8/G9, 7 Nov):** bintang per komponen 0–5 (keyword, freshness, place, target fit), overall 0–20, tier S ≥ 16 / A ≥ 12 / B ≥ 8 / C ≥ 4. Materialisasi jalan 7 Nov. Formula di `docs/decisions.md` G8.
+14. **Model Vultr.** Masih terbuka. Daftar model harus dicek live. Kandidat: glm-5.3, glm-5.3-flash, mimo-v2.6-pro.
+15. ~~Aturan lablab~~ **Ditutup (user, 7 Nov):** dianggap aman, tidak ada tindakan.
+16. **Angka tryclean "75 sinyal dalam 8 kategori".** Masih terbuka. Belum diverifikasi di halaman.
+17. **Nama dua feed permit kota.** Masih terbuka. Perlu dicatat di `sources.md`.
+18. **Sumber pertama yang diuji di scratch.** Masih terbuka. NYC SODA (`rbx6-tga4`) sudah tervalidasi sebagai kandidat.
+19. ~~Aturan tier S, A, B, C~~ **Dijawab (Q5, 7 Nov):** tier dihitung dari skor kecocokan dengan Target, bukan temperature. Ambang per tier belum final.
+20. ~~Prospek di luar wilayah layanan~~ **Dijawab (grill G5, 7 Nov):** bukan badge. Wilayah komponen skor. Yang tidak cocok jatuh dari top 20. Data tetap di DB.
+21. ~~Verifikasi kinerja Seer~~ **Diukur (7 Nov):** agregat 365 hari 3901 ms, seq scan, 22.509 perusahaan. Detail di `KLISEER_BUILD_PLAN_2.md`.
+22. ~~Coverage pipeline A + C~~ **Diukur (7 Nov):** Step A homepage 1/10; ditambah `/contact` `/about` `/team` jadi 4/10 (`islandelectric.info`, `slgreen.com`, `solasnyc.com`, `corescaffold.com`). C masih manual. Bukit 40 halaman semuanya 200.
+23. **Sumber per-field C5.** Baru: email dan nama DM di C5 belum terbukti di `solasnyc.com/contact`. Perlu dicek sebelum tampil di UI.
+24. ~~Tujuh kontak guest tambahan~~ **Diisi (7 Nov)** lewat Hunter ke tabel `contacts`, plus 3 lead C5 dan 2 ekstra (Ace Group, Berger Quality). Total 13 baris, 12 perusahaan. Guest 10 = Island, SL Green, Kale, Sunrun, Vornado, Momentum, Core Scaffold, Solas, Hivolts, A&S. Script: `scripts/seed-hunter-contacts.ts`.

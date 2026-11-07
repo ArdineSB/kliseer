@@ -10,14 +10,15 @@
     "lint": "eslint",
     "db:init": "tsx --env-file=.env.local scripts/db-init.ts",
     "ingest": "tsx --env-file=.env.local scripts/ingest.ts",
-    "check": "tsx scripts/tier.check.ts"
+    "check": "tsx scripts/tier.check.ts && tsx scripts/account.check.ts"
   },
   "dependencies": {
     "next": "16.4.5",
     "openai": "7.52.0",
     "postgres": "4.1.0",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "unpdf": "1.4.0"
   },
   "devDependencies": {
     "@types/node": "26.6.6",

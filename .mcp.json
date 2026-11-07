@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "figcraft": {
+      "command": "C:/Users/Admin/.omp/mcp/storytold-figcraft/target/release/figcraft-cli.exe",
+      "args": [
+        "mcp",
+        "--automation-read-root",
+        "C:/Users/Admin/Documents/vultr-hackathon/kliseer-v2",
+        "--automation-write-root",
+        "C:/Users/Admin/Documents/vultr-hackathon/kliseer-v2"
+      ]
+    }
+  }
+}

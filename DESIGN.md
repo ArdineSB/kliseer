@@ -102,6 +102,11 @@ Urutan sidebar **disepakati** dan tetap sama di seluruh layar.
 
 Nama produk selalu **Kliseer**. **Klise** dan **Seer** adalah label tab. Judul isi halaman boleh menjelaskan fungsinya, misalnya `Company background` dan `Prospects`.
 
+**Aset logo resmi — dipilih user 7 November 2026:** gunakan `logo-concepts/kliseer-lockup.svg` untuk ikon + tulisan, `logo-concepts/kliseer-icon.svg` untuk ikon saja, dan `logo-concepts/kliseer-wordmark.svg` untuk tulisan saja. Impor SVG asli; jangan menggambar ulang simbol dengan huruf `K` atau mengetik ulang wordmark. Pertahankan proporsi, warna, dan bentuk sudut aset; avatar tidak boleh memotong ikon menjadi lingkaran.
+
+Di FigCraft, ketiganya tersedia sebagai komponen vektor `brand/lockup`, `brand/icon`, dan `brand/wordmark` di halaman Components. Lockup diterapkan ke seluruh 36 sidebar Screens/Q20; ikon menggantikan identitas assistant pada Home, chat kontekstual, dan master `chat/message` beserta instance-nya. Tidak ada penempatan wordmark-only pada layar saat ini; master-nya disiapkan dari aset resmi, bukan varian baru. Aset sumber tidak diubah. Perubahan ini pada dokumen desain dan export, belum frontend.
+
+
 ### Shell desktop
 
 Ukuran kerja **teramati dari file FigCraft saat ini** (direvisi 4 November 2026), frame **1440 × 900 px**:
@@ -115,7 +120,15 @@ Ukuran kerja **teramati dari file FigCraft saat ini** (direvisi 4 November 2026)
 
 Workspace terdiri dari topbar 52 px (breadcrumb kiri, feedback simpan kanan), konten dengan padding 28/32 px, dan footer aksi 68 px pada layar setup. Form setup dibatasi lebar 640 px. Angka ini titik awal implementasi, bukan kewajiban koordinat absolut.
 
-**Sidebar (mengikuti `reference/sidebar.png`):** logo `K` ungu 28 px dengan wordmark, `Home` berdiri sendiri, tab lain di bawah label `Workspace`. Item 34 px dengan ikon garis 16 px. Item aktif berupa bidang putih, border tipis, shadow kecil, ikon ungu, dan teks Semi Bold. Selama setup, kartu `Setup N of 4` dengan progress bar ada di bawah sidebar. Ini menggantikan latar lavender ref-2 untuk item aktif.
+**Sidebar (mengikuti `reference/sidebar.png`):** gunakan instance `brand/lockup` dari `kliseer-lockup.svg`, dengan simbol tampak 28 px; `Home` berdiri sendiri, tab lain di bawah label `Workspace`. Item 34 px dengan ikon garis 16 px. Item aktif berupa bidang putih, border tipis, shadow kecil, ikon ungu, dan teks Semi Bold. Selama setup, widget `Getting started` menggantikan kartu `Setup N of 4` lama. Navigasi aktif tetap mengikuti referensi sidebar, bukan lavender ref-2.
+
+**Getting started — revisi user 7 November 2026:** styling mengikuti screenshot checklist dan `reference/setup.txt`, diadaptasi ke lebar sidebar 196 px. Header menampilkan chevron, judul, 14 batang vertikal, dan counter selesai `/4` dalam satu baris. Kartu putih, radius 12 px, border tipis, shadow lembut. Progress hijau memakai variable `setup/progress-complete` (`#22C55E`); lingkaran selesai memakai `status/success` agar checkmark putih terbaca. Tidak ada perubahan pada stepper di konten utama.
+
+Komponen set `setup/progress` memiliki `Stage=Company/ICP/Target/Review/ReviewNeedsInput` dan `Expanded=False/True` (10 varian). Ukuran collapsed 196 × 52 px; expanded 196 × 260 px. Terpasang pada 23 sidebar setup/Q20, termasuk upload. Instance dan wrapper mengikuti tinggi konten; spacer sidebar menyusut saat dibuka, sehingga widget mengembang ke atas dan tetap berjarak sama dari bawah. Semua frame tersimpan collapsed seperti default kode referensi.
+
+Checklist tetap empat langkah Kliseer: Company → ICP → Target → Review. Langkah selesai memakai check hijau, langkah aktif nomor gelap, langkah mendatang nomor outline dan tidak memiliki navigasi. Langkah selesai dapat dibuka kembali. Counter menunjukkan langkah sebelumnya yang selesai, bukan nomor langkah aktif atau approval: Company `0/4`, ICP `1/4`, Target `2/4`, Review `3/4`. Review incomplete memakai `ReviewNeedsInput`: Company selesai, ICP aktif/perlu diperbaiki, Target dan Review belum selesai (`1/4`); tidak menampilkan check palsu pada ICP.
+
+Header memiliki interaksi prototipe `changeTo` collapsed ↔ expanded dengan Smart Animate 200 ms. Geometri collapsed dan expanded diuji melalui pergantian properti instance dalam shell Target; tinggi expanded 260 px dan posisi sidebar y=612 menjaga batas bawah y=872. Render dan export diperiksa. Belum diuji dengan klik presenter dan belum implementasi React/Motion. Preview expanded: `design/export/setup-getting-started-expanded.png`.
 
 **Adaptasi referensi:** kedua gambar memperlihatkan sidebar kiri dan area konten luas. Kliseer menambahkan panel chat kanan sesuai keputusan produk. Pertahankan rasa lapang melalui padding, hierarki header, dan lebar konten yang fleksibel. Untuk halaman yang membutuhkan pencarian, tempatkan kontrol itu pada header/toolbar tipis; judul dan aksi halaman mendapat baris sendiri. Ini pola penataan, bukan keputusan menambahkan global search atau menu akun baru.
 
@@ -145,6 +158,16 @@ Field dari brief: `Company name`, `Website`, `Products and services`, `Customer 
 
 Tampilkan form yang bisa diedit berdampingan dengan chat. Siapkan contoh kosong, terisi draft, dan tersimpan. Aksi lanjut: `Continue to ICP`. Aturan field wajib dan validasi bisnis belum final; jangan menetapkan semua field sebagai wajib hanya karena tercantum di layout.
 
+**Upload — frame 5, dirancang 7 November 2026, menunggu review:** panel upload ditambahkan ke `setup/company/empty` (id `2238`) tanpa mengganti stepper. Tiga frame turunan di baris canvas y=6000: `klise/upload/parsing` (`6456`), `klise/upload/draft` (`6598`), dan `klise/upload/error` (`6740`). Keempat state memakai shell Klise yang sama. State form lama lainnya tetap tersedia.
+
+- Kosong: `Upload file`, PDF/MD/TXT, batas 2 MB dari `lib/upload.ts`; tombol `Load Harborline study case` hanya di state Company kosong.
+- Parsing: status membaca file tanpa persentase rekaan, `Cancel`, form diredupkan dan aksi lanjut nonaktif. Stepper tidak berubah.
+- Draft: contoh ilustratif seller fiktif Harborline, bukan hasil parsing nyata. Empat field Company terisi (name, products, customer segments, region), masing-masing dengan label `Draft · From file` dan kutipan inline. Website, existing customers, dan price range tidak diisi karena contoh file tidak memuatnya. Tidak ada approval otomatis. Contoh ini memperlihatkan hasil Company; file lain dapat menghasilkan draft ICP/Target sesuai Q3.
+- Error: teks persis `Could not read that file.`, petunjuk format/ukuran, dan `Choose file`. Form tetap tersedia untuk pengisian manual.
+- Semua state menjelaskan file tidak disimpan; hanya nilai hasil ekstraksi dan kutipan yang disimpan. Nama file dan kutipan di frame adalah konten ilustratif, bukan bukti upload runtime.
+- Wiring prototipe: Upload/Choose/Replace → parsing → draft setelah 2.2 detik (simulasi saja); Cancel → kosong; Load Harborline → draft; Continue to ICP dari draft → ICP kosong. Error dapat direview langsung di canvas. Render keempat state 1440 × 900 diperiksa via MCP; belum diuji dengan file picker/presenter dan belum ada perubahan frontend.
+
+
 ### ICP
 
 Kriteria dari brief: industry, company size, region, dan event types. Tampilkan nilai dan statusnya secara jelas. Aksi lanjut menuju Target. Hindari membuat ICP dan Target terasa sebagai dua form identik: ICP menjelaskan kecocokan pelanggan, Target menentukan fokus pencarian.
@@ -161,41 +184,46 @@ Field dari brief: target company types, regions, dan buyer roles. Aksi lanjut me
 
 ### Seer / tabel prospek
 
-Urutan isi dari brief:
+**Frame 6 — direvisi via FigCraft MCP 7 November 2026, menunggu review:** `seer/table/{ready,loading,empty,error}` diperbarui pada frame lama, plus `filtered-empty` agar pencarian kosong tetap berbeda dari belum ada hasil. Shell, logo resmi, sidebar, dan panel Seer chat dipertahankan. Ini desain, belum perubahan frontend/backend.
 
-1. Judul `Prospects` dan konteks pencarian.
-2. Ringkasan `Prospects found`, `Tier S prospects`, dan prospek baru; canvas saat ini memakai label `New this week`.
-3. Search perusahaan/domain dan filter `All`, `New this week`, `Tier S`, `Mine`.
-4. Tabel prospek sebagai fokus utama.
+Frame 6 masih memakai snapshot ilustratif lama: 20 baris, kolom `Fit*` 96–77, tiga faktor teks, dan tanpa tier. **Ini bukan kontrak scoring terbaru.** G8/G9 sekarang menetapkan empat rating 0–5, total 0–20, dan tier deterministik; revisi ini diterapkan pada detail frame 7–9. Migrasi tampilan tabel frame 6 belum menjadi scope permintaan revisi ini.
 
-Informasi tabel: company, domain, tier, reason to buy, contact window, contact role, industry, status, dan source count. **Usulan untuk menjaga lebar:** company dan domain berada dalam satu sel dua baris; kolom lain tetap dapat diakses melalui scroll tabel. Angka rata kanan, teks rata kiri.
+Tabel memakai komponen `seer/prospect-row` (id `8425`), dengan properti teks Rank, Company, Location, Score, Evidence, Date. Ada tepat 20 instance. Viewport 806 × 432 px memuat enam baris 72 px; konten 20 baris setinggi 1440 px memakai overflow vertical. Header dan footer gate berada di luar scroll. CTA terbaru yang diminta user: `Upgrade to view all`; seluruh teks UI memakai English. Gate UI saja, tanpa billing atau angka total tersembunyi rekaan.
 
-Tabel mengambil border halus, header netral, metadata tenang, dan selected state dari bahasa visual referensi. Grid kartu pada screenshot diterapkan pada ringkasan atau kelompok informasi; hasil prospek tetap memakai tabel sesuai keputusan pengguna. Metrik dan toolbar diberi ruang terpisah agar halaman tidak terasa sesak.
+**Data contoh:** 20 nama perusahaan berbeda, tanggal, dan bukti berasal dari record publik NYC DOB electrical permits, endpoint `https://data.cityofnewyork.us/resource/dm9a-ab7w.json`, dibaca 7 November 2026. Dipilih record terkait generator, transformer, panel, service switch, dan peralatan listrik; ini kurasi ilustratif, bukan top 20 terverifikasi untuk seller. Tiap instance menyimpan `sourceUrl`, `sourceRecordId`, kutipan asli penuh, dan status skor ilustratif pada pluginData. Teks Evidence adalah ringkasan singkat, bukan kutipan verbatim. Source membuka record dengan query `?job_filing_number=<id>`. Tidak ada domain, kontak, source count, atau confidence rekaan. Data tersebut bukan pengisian 10 kontak guest Q12; mode guest tetap keputusan terpisah.
 
-Saat discovery berjalan, tampilkan progres per sumber. Bedakan `No prospects yet` dari `No matching prospects` setelah filter. `Retry` ditampilkan pada kegagalan yang bisa dicoba ulang.
+State loading menunjukkan `Loading matches…` dan skeleton; hanya membaca saved matches dari DB, bukan progres request per sumber. Ingest terjadwal 06:00 UTC dicantumkan sebagai jadwal, bukan klaim data baru saja berhasil diperbarui. Empty menjelaskan belum ada hasil dan menawarkan `Edit target`. Error memakai `Could not load prospects.` dengan `Retry`, tanpa menghapus setup. Filtered-empty menampilkan pencarian tanpa hasil dan `Clear search`. Nilai hasil tidak diganti nol ketika loading/error.
 
-Definisi periode prospek baru, cakupan hitungan ringkasan terhadap filter, serta arti kepemilikan pada `Mine` belum final. Angka dalam mockup adalah data contoh, bukan hasil discovery terverifikasi.
+Wiring: Retry → loading → ready setelah 1.6 detik (simulasi DB); Edit target → Target empty; Clear search → ready; 20 tautan Source membuka record masing-masing. Baris 20 menggunakan Hivolts dan membuka detail yang sesuai. Skor/urutan tabel tetap ilustratif. WCK dan A&S tersedia sebagai frame detail review, bukan tambahan baris baru. Search/sort serta gate belum runtime frontend.
+
+Verifikasi: render kelima state desktop 1440 × 900 diperiksa; baris 15–20 diperiksa dengan offset visual konten sementara, diekspor ke `seer-table-ready-bottom.png`, lalu posisi awal dikembalikan ke y=0 sebelum save. Smoke struktur MCP memastikan 20 instance, 20 source record unik, 20 aksi Source, dan tidak ada teks tier/domain `.example`/perusahaan fiktif lama di kelima frame. Klik, scroll, search/sort dan gate belum diuji end-to-end di presenter/browser. Akses DB lokal untuk sampel timeout; data canvas diambil langsung dari endpoint publik, bukan hasil query DB yang diklaim berhasil.
 
 ### Seer / detail prospek
 
-**Usulan navigasi, Q21 belum final:** pilih perusahaan untuk membuka detail di workspace utama; sidebar dan Seer chat tetap terlihat. Sediakan `Back to prospects`. Usulan ini memakai halaman detail dalam shell, bukan mengunci implementasi ke komponen drawer.
+**Frame 7–9 — direvisi di tempat, bukan frame baru:** `seer/detail/ready` id `2097` sekarang WCK ELECTRIC CORP.; Hivolts `4701` dan A&S `8819` tetap ada. Shell, posisi frame, sidebar/logo, dan Seer chat dipertahankan. Jumlah Screens tetap 34. Loading/error yang menuju ready diperbarui ke WCK. Detail tetap scroll dalam workspace, bukan halaman email baru.
 
-Isi detail dari brief:
+Urutan: Back to prospects → nama/domain → navigasi bagian → **Analysis → Company profile → Contacts → Email draft → Sources**. Sources selalu bagian terakhir. Tombol navigasi dan citation IDs memiliki aksi scrollTo; source rows eksternal memiliki URL, sementara C5 research snapshot secara jujur menunjuk catatan internal, bukan URL verifikasi palsu.
 
-- Nama perusahaan, domain, dan tier.
-- `Why now`: sinyal, tanggal, jenis, sumber, dan tautan sumber.
-- Decision makers: nama, role, sumber, dan confidence jika tersedia.
-- Contact window dan konteks alasan beli.
+**Analysis / frame 8 — G8 menggantikan spesifikasi tiga baris sebelumnya:** empat baris **Keyword, Freshness, Place, Target fit**, masing-masing lima ikon star vektor dengan bagian kosong berupa outline, angka `n / 5`, dan alasan singkat. Header memuat `Overall 16 / 20` + badge `Tier S`. Kartu 808 × 418 px; paragraf interpretasi dipisahkan dari rating, dengan catatan bahwa AI tidak menghitung skor. Snapshot read-only DB 7 Nov memverifikasi WCK (id `69623`), Hivolts (`69825`), dan A&S (`69767`) semuanya k=5/f=5/p=5/t=1, total 16, S. Target fit 1 karena seller target.companyTypes kosong; jangan menebak jenis perusahaan. WCK punya lima keyword-matching signals dalam 90 hari; filing terbaru Nov 5. Overall bukan bukti buying intent. A&S tetap diberi caveat permit Complete.
 
-Tampilkan `—` untuk tier yang belum tersedia. Gunakan pesan yang sesuai penyebab: `No signals from connected sources.` untuk belum ada sinyal; `Not enough corroborating signals from connected sources.` hanya jika data memang menyatakan bukti belum cukup. Jangan menyimpulkan aturan scoring dari warna badge.
+**Company profile:** tetap 15 field C5. WCK memakai firm/address dari DOB, 464 saved signals dan 5 keyword matches/90 hari dari DB; phone/email/website/decision maker yang tidak tersedia ditulis not found, bukan meminjam data Solas. Sources WCK memisahkan tiga URL permit nyata dari snapshot scoring dan seed internal. Profile Hivolts/A&S mempertahankan caveat count C5; nama orang di luar seed tidak dijadikan decision maker atau recipient.
+
+**Contacts / frame 7:** hanya kontak dari 13 baris `scripts/seed-hunter-contacts.ts`, dicatat juga di `docs/sources.md` C6. WCK tidak punya seed row dan query kontak DB kosong: tampil no-contact, Phone: not found + link permit, ikon LinkedIn/web/social dicoret tanpa URL. Hivolts memakai Moishy Rosman dan company contact Hivolts Electrical; A&S memakai company contact A & S Electric Inc., bukan Francis. Komponen draft Solas hanya memakai Conor dengan `office@solasnyc.com`. Isaac, Francis, Yosef, dan `conor@` tidak dipakai sebagai kontak desain ini. Domain jobs@hivoltelectrical.com tetap mengikuti seed, tanpa koreksi diam-diam. Label Hunter tidak dinaikkan menjadi website-confirmed.
+
+State `seer/contact-availability/phone-missing` (`9597`) tetap tersedia. WCK juga memakai state itu secara nyata di detail: Phone: not found + URL permit, tanpa klaim bahwa pencarian eksternal sudah dijalankan. Hivolts/A&S mempertahankan nomor first-party yang diketahui. Form manual LinkedIn empty/filled tetap memakai Moishy dari seed. Lookup: login wajib, Free maksimum 5/bulan, tanpa scraping/extension atau runtime Hunter/SerpAPI Free. Ini desain, bukan API lookup yang sudah tersambung.
+
+**Email draft / frame 9:** 11 varian reusable lama tetap dipakai (Solas/Hivolts/A&S Empty, Generating, Saved; Hivolts NameChanged; Solas Guest), bukan menggambar layar baru. Hivolts Saved ↔ NameChanged sekarang **Moishy Rosman ↔ Hivolts Electrical** (jobs@hivoltelectrical.com); subject dan salam berubah nama saja, edit `We can work around your delivery schedule.` tetap. A&S memakai company contact/email seed, tanpa individual DM. Panel WCK id `9240` adalah override contact-required pada instance lama: tidak punya recipient, Generate disabled tanpa interaction; tidak meminjam kontak Solas. Hivolts/A&S default Empty. Generating delay tetap simulasi 1.8 detik. Input, clipboard, Save changes, auth, dan sending belum runtime.
+
+**Verifikasi revisi G8:** render detail, empat star rows, profile, contacts, Sources dan draft diperiksa; clearance paragraf/footnote disesuaikan agar tidak bertumpuk. Smoke struktur: empat faktor × lima slot star per detail, filled 5/5/5/1, total16/S, 15 profile fields, Sources terakhir. Query read-only berhasil membaca scores, sumber WCK, count464/matched5, dan kontak WCK kosong; tidak menjalankan refresh/seed. Instance Hivolts Saved → NameChanged dibuktikan mengganti nama saja pada subject/body; delivery edit utuh, kemudian dipulihkan Empty. WCK Generate tidak punya interaction. Pencarian teks UI seluruh halaman tidak menemukan Yosef/Francis/Isaac/conor@. Belum menguji klik presenter, input, atau layanan frontend/backend.
+
 
 ### Layar pendukung
 
-Home memuat chat global, composer, history per tab, dan tiga suggestion chips pada empty state. Signals menampilkan sinyal per sumber dan tanggal. Competitors dan Profiling cukup memiliki struktur dasar, isi contoh yang jelas, dan tujuan navigasi. Kedalaman desainnya mengikuti D-23.
+Home mengikuti Q9 dan frame 4 di `KLISEER_BUILD_PLAN_2.md`: chat global, history per tab, greeting, tiga kartu, empat aksi, dan composer bawah berdasarkan `reference/chat.png`, dengan warna dan font Kliseer. Signals menampilkan sinyal per sumber dan tanggal. Competitors dan Profiling tetap pada rancangan dasar D-23.
 
 **Sudah dirancang di canvas (frame dasar, satu state `ready`/`empty`):**
 
-- **Home:** history thread dikelompokkan per tab di kolom kiri dengan tombol `New chat`. Area tengah berisi sapaan, composer besar, dan tiga suggestion card. Tidak ada panel chat kanan, sesuai §4.
+- **Home — direvisi 7 November 2026 via FigCraft MCP:** frame lama `home/chat/empty` (id `5013`) tetap 1440 × 900 px; sidebar delapan tab tetap dipakai. Kolom history 216 px menampilkan `No conversations yet`, tanpa contoh thread atau seller bawaan. Area chat memiliki greeting terpusat, tiga kartu (assistant putih dengan border gradient ungu, tautan Company/ICP/Target, suggested prompt), empat aksi (`Company profile`, `Define ICP`, `Set targets`, `View prospects`), dan composer 844 × 116 px di bawah. Kartu assistant dan tombol `New chat` di kolom Chats memakai isi putih dan border gradient diagonal 1.5 px inside: `#5B21B6` → `#8B5CF6` → `#6D28D9` (posisi 0 / 0.5 / 1); judul kartu gelap, label dan ikon ungu. Treatment ini dipilih user; ukuran, posisi, copy, dan interaksi tetap. Tombol `New chat` di header tetap netral. Inter dan variable warna Kliseer dipakai; fitur Voice, Share, dan Calendar dari referensi tidak disalin. Collection `Session preview`, mode `Guest` / `User`, mengubah label shell menjadi `Log in` / `Log out` dalam frame yang sama; file disimpan pada mode Guest. Ini desain untuk review canvas, bukan implementasi chat/auth. Landing, login, Signals, Competitors, Profiling, dan stepper setup tidak diubah.
 - **Signals:** tabel Date, Type (badge), Company, Signal, Source, dengan filter `All / Permits / Hiring / Contracts`. Filter ini usulan.
 - **Competitors:** tabel Competitor + domain, Overlapping products, Regions, Positioning, Sources.
 - **Profiling:** tabel Company + domain, Type, Employees, Location, Profile (`Complete` / `Partial`), Updated. Status `Partial` dan kolomnya usulan.
@@ -243,7 +271,7 @@ Nilai berikut adalah **usulan token untuk menerjemahkan kedua referensi**. Scree
 | `selection.border` | `#8B5CF6` | Outline pilihan; sertakan penanda teks/ikon |
 | `focus.ring` | `#6D28D9` | Fokus keyboard pada kontrol |
 | `border.default` | `#E5E7EB` | Pemisah panel |
-| `border.input` | `#DADDE5` | Field dan composer |
+| `border.input` | `#8F9197` | Field dan composer (digelapkan dari `#DADDE5` agar ≥3:1) |
 | `border.row` | `#EDF0F3` | Pemisah baris tabel |
 
 Token warna sudah dibuat sebagai variables di FigCraft, collection `Kliseer tokens` (41 variable warna, satu mode), dan diikat ke semua fill dan stroke di halaman `Screens`. Nama di FigCraft memakai slash (`action/primary`, `text/muted`, `tier/A-bg`) dan diekspor ke `design/tokens.css` sebagai custom property (`--action-primary`). Tambahan untuk state: `action/primary-hover` `#5B21B6`, `navigation/hover-bg` `#E9E9EE`, dan `focus/ring` `#6D28D9`.
@@ -273,7 +301,7 @@ Badge pada canvas berukuran 26 × 24 px dengan radius 6 px. C dan `—` boleh be
 | Putih di atas `action/primary` | 7.10 | Lolos |
 | Teks disabled `#6B5FA0` di atas `#EDE9FE` | 4.69 | Lolos (disabled tidak wajib, tetap terbaca) |
 | `status/error` di atas canvas | 6.57 | Lolos |
-| Border input `#DADDE5` di atas putih | 1.36 | **Gagal 3:1 untuk batas komponen (1.4.11).** Belum diubah; label field selalu terlihat, tetapi batas input lemah. Opsi: border `#8F9197` (3.05:1) atau terima dengan alasan label |
+| Border input `#8F9197` di atas putih | 3.05 | Lolos 3:1 untuk batas komponen (1.4.11); sebelumnya `#DADDE5` 1.36 |
 
 ### Tipografi, spacing, dan ukuran
 
@@ -351,7 +379,7 @@ Target review desain, belum klaim hasil pengujian:
 - Nama perusahaan dapat menjadi link detail yang jelas, selain klik baris.
 - Status, approval, dan tier dapat dipahami tanpa warna.
 - Teks panjang membungkus atau memiliki cara membaca isi lengkap, tanpa menutupi kontrol.
-- Kontras token sudah dihitung (§7). Sisa: border input dan pengujian dengan alat bantu nyata.
+- Kontras token sudah dihitung (§7). Sisa: pengujian dengan alat bantu nyata.
 - Setelah berpindah layar atau muncul error, fokus diarahkan ke judul atau masalah yang relevan.
 - Transisi tidak menghalangi pekerjaan; sediakan perilaku reduced motion saat animasi ditambahkan.
 
@@ -359,31 +387,36 @@ Target review desain, belum klaim hasil pengujian:
 
 ## 10. Status file FigCraft dan handoff
 
-Pemeriksaan file pada 4 November 2026: `design/kliseer.figcraft` sebelumnya **tidak ditemukan** di repo, sehingga file dibuat ulang dari nol dengan acuan referensi dan dokumen ini. Halaman `Screens` berisi 30 frame 1440 × 900 px; halaman `Components` berisi komponen reusable:
+File `design/kliseer.figcraft` dibangun ulang pada 4 November dan diperbarui melalui MCP. Setelah penambahan A&S pada frame 7–9, Screens berisi 34 frame desktop; Components memuat logo, setup, row Seer, state draft, serta contact manual/availability. Semua perubahan detail masih menunggu review user.
 
 | Kelompok | Frame | Keterangan |
 |---|---|---|
 | Setup | `setup/company/{empty,draft,loading,error,saved}` | Tab aktif Klise; error = Website tidak valid |
+| Upload Klise | `setup/company/empty`, `klise/upload/{parsing,draft,error}` | Panel upload dan study case pada empty; draft dengan kutipan; error baca file terpisah dari error Website |
 | Setup | `setup/icp/{empty,draft,loading,error,saved}` | Error = Company size bukan rentang |
 | Setup | `setup/target/{empty,draft,loading,error,saved}` | Error = gagal simpan, banner dengan `Retry` |
 | Setup | `setup/review/{ready,incomplete}` | Incomplete = ICP `Needs input`, Target `Draft` |
-| Seer | `seer/table/{ready,loading,empty,filtered-empty,error}` | Tab aktif Seer; loading menampilkan progres per sumber |
-| Seer | `seer/detail/{ready,loading,error,unavailable}` | Unavailable = Ironbound, tier `—`, satu sinyal dengan `Not enough corroborating signals from connected sources.`, decision makers dan contact window kosong |
+| Seer | `seer/table/{ready,loading,empty,filtered-empty,error}` | Top 20; loading saved DB; CTA upgrade English |
+| Detail Seer | `seer/detail/{ready,hivolts,as,loading,error}` | Ready = WCK; Analysis empat bintang + overall tier; profile/contacts/draft; Sources terakhir |
 | Tab dasar | `home/chat/empty`, `signals/list/ready`, `competitors/list/ready`, `profiling/list/ready` | Dibangun dari komponen; data mockup |
 
-Pola state di setup: `Draft`, `Drafting…`, `Not saved`, dan `✓ Saved` di topbar; titik ungu di samping label field menandai nilai `From chat`, dengan satu legenda di header halaman. Topbar Seer memiliki label `Sample data` karena semua perusahaan, domain `.example`, kontak, dan angka adalah data mockup.
+Pola state di setup: `Draft`, `Drafting…`, `Not saved`, dan `✓ Saved` di topbar; titik ungu di samping label field menandai nilai `From chat`, dengan satu legenda di header halaman.
+
+**Data:** Harborline adalah seller study case, bukan default akun. Tabel Seer masih snapshot permit/skor ilustratif lama. Detail memakai WCK/Hivolts/A&S dan score DB G8 yang terverifikasi read-only; kontak dibatasi 13 seed rows. Analysis/email tetap copy desain, bukan panggilan layanan AI runtime. Signals/Competitors/Profiling tidak direvisi.
+
+**Halaman `Q20 approval options`:** tiga frame pembanding Review, yaitu `Q20/A per-section approve` (desain saat ini), `Q20/B one confirm` (satu checkbox), dan `Q20/C no gate` (`Find prospects` selalu aktif). Halaman ini hanya untuk membantu keputusan; hapus dua opsi yang tidak dipilih.
 
 **Interaksi prototipe yang tersambung (±300 link, transisi dissolve 200 ms):**
 
 - `Continue to …` dari state draft: Company → ICP → Target → Review ready.
 - `Back` dan langkah selesai di stepper membuka langkah terkait dalam state saved.
 - `Edit` di kartu Review dan `Back` di Review membuka langkah terkait.
-- `Find prospects` membuka `seer/table/loading`, yang berpindah otomatis ke `seer/table/ready` setelah 1,5 detik.
-- Baris Northgate membuka detail ready; baris Ironbound membuka detail unavailable. `Back to prospects` kembali ke tabel. Detail loading berpindah otomatis ke ready setelah 1,5 detik; `Retry` di detail error kembali ke loading.
+- `Find prospects` membuka `seer/table/loading`, lalu berpindah ke ready setelah 1.6 detik sebagai simulasi pembacaan DB, bukan live discovery.
+- Dua puluh tautan Source di tabel tetap ada; Hivolts row20 membuka detail sesuai perusahaan. Detail WCK/Hivolts/A&S mempertahankan Back to prospects dan jump antarbagian; loading/error menuju WCK ready.
 - `Approve` di Review incomplete membuka Review ready (pintasan prototipe; approval per bagian belum dimodelkan).
 - Semua delapan menu sidebar di semua frame membuka tab terkait: Home, Company saved (Klise), Target saved, tabel Seer, Signals, Competitors, Profiling, dan ICP saved.
-- Di Home, suggestion card membuka Seer, Signals, dan Company; thread history membuka tab asalnya.
-- `Retry` di error kembali ke loading; `Clear filters` ke tabel; `Edit setup` di Seer membuka Review.
+- Di Home revisi 7 November, tautan setup dan aksi Company/ICP/Target membuka frame setup kosong; `View prospects` membuka Seer. Suggested prompt memiliki interaksi `setVariable` pada `home/composer-text`, yang terikat ke teks composer. `New chat` memiliki aksi reset teks. History kosong belum memiliki thread untuk dibuka. Shell `Log in` / `Log out` belum ditautkan ke auth; composer bukan input chat runtime. Render desktop Guest dan User diperiksa via MCP; interaksi belum diuji di presenter.
+- Di Seer revisi frame 6, `Retry` membuka loading, `Clear search` membuka ready, dan `Edit target` membuka Target empty. Kontrol search/sort serta gate upgrade belum merupakan runtime frontend.
 
 **Komponen dan style (halaman `Components`):**
 
@@ -394,8 +427,11 @@ Pola state di setup: `Draft`, `Drafting…`, `Not saved`, dan `✓ Saved` di top
 | `tier/badge` | `Tier` S/A/B/— |
 | `status/badge` | `Status` Approved/Draft/Needs input/Neutral; teks `Label` |
 | `field/text` | `State` Default/Error; teks `Label`, `Value`, `Error` |
-| `field/chips`, `chat/composer`, `setup/progress` | Komponen tunggal |
+| `field/chips`, `chat/composer` | Komponen tunggal |
+| `setup/progress` | `Stage` Company/ICP/Target/Review/ReviewNeedsInput × `Expanded` False/True; checklist Getting started |
 | `chat/message` | `Role` Assistant/User; teks `Text` |
+| `brand/lockup`, `brand/icon`, `brand/wordmark` | SVG resmi user; vektor, warna asli, skala proporsional |
+| `seer/prospect-row` | Props teks Rank/Company/Location/Score/Evidence/Date; 20 instance pada ready; warna melalui semantic tokens |
 
 Text style: `Page title`, `Section heading`, `Body`, `Body strong`, `Label`, `Metadata`.
 
@@ -422,18 +458,28 @@ Sebagian besar selisih di atas sudah diterapkan pada file yang dibuat ulang: ung
 Paket handoff:
 
 1. File `.figcraft` yang disimpan setelah review: `design/kliseer.figcraft`.
-2. Export PNG: `design/export/` berisi 30 frame (nama file = nama frame dengan `/` menjadi `-`, skala 1×) dan `components.png` (skala 2×). Token CSS: `design/tokens.css`.
+2. Export PNG: `design/export/` mencakup 34 frame Screens, Q20, profile/Analysis/Contacts/Sources WCK/Hivolts/A&S, 11 varian email yang memakai seed sah, WCK contact-required, dan manual/phone states. Capture Solas section lama yang digantikan WCK dihapus agar tidak menjadi acuan stale. Atlas `components.png` 2000 px lebar; detail vektor tetap di FigCraft. Token CSS: `design/tokens.css`.
 3. Daftar token final, ukuran komponen, dan contoh state.
 4. Peta interaksi: stepper, edit dari Review, Find prospects, detail, dan kembali ke tabel.
 5. Catatan konten/data yang masih contoh atau belum diputuskan.
 
 React atau Next.js ditentukan setelah desain disetujui. Pilihan Vite, Tailwind, shadcn/ui, icon library, dan library tabel dalam brief sebelumnya masih usulan. Handoff harus cukup jelas untuk diimplementasikan sebagai komponen yang responsif tanpa bergantung pada koordinat absolut canvas. Ekspor token JSON khusus belum diverifikasi; catatan token manual tetap dapat dipakai.
 
+### Aturan implementasi design system — disetujui user 7 November 2026
+
+- Terapkan prinsip atomic design sebagai komposisi foundation → komponen dasar → kelompok/section → page, tanpa menggambar ulang tampilan dan alur yang sudah disetujui. Tidak wajib memakai folder atoms/molecules/organisms atau membuat abstraksi tanpa kebutuhan reuse.
+- Gunakan semantic tokens untuk warna, typography, spacing, radius, shadow, dan motion. Setiap token memiliki nama, nilai, dan fungsi. Nilai theme dipusatkan pada satu sumber kanonis; jangan menyebarkan hex atau nilai visual yang sama ke setiap komponen, halaman, atau inline style.
+- Dokumentasikan mapping nama variable FigCraft ke CSS custom properties. Bila utility classes digunakan, petakan ke semantic tokens, bukan arbitrary hex per pemakaian. Pemilihan library utility bukan keputusan dari aturan ini.
+- Implementasikan light theme terlebih dahulu. Nama token dan class tetap sama saat theme berubah; nilai CSS variable yang berubah. Dark theme menunggu desain dan persetujuan, tidak otomatis masuk scope dan tidak dibuat dengan membalik warna.
+- Komponen reusable mendokumentasikan anatomy, props, variants, dan state yang relevan: default, hover, focus-visible, active/selected, disabled, loading, empty, dan error. Section dan page menyusun komponen yang sama, bukan salinan styling per layar.
+- Pertahankan aset logo resmi dan keputusan visual FigCraft. Baca ulang `reference/setup.txt` saat mengimplementasikan Getting started; adaptasikan ke empat langkah dan state Kliseer, bukan menyalin hardcode langkah aktif dari contoh. Aturan ini adalah kontrak handoff/frontend, bukan klaim frontend sudah diimplementasikan.
+
+
 ## 11. Keputusan yang masih terbuka
 
 - Bentuk Review dan mekanisme approval rinci (Q20).
 - Navigasi detail prospek: usulan saat ini menggunakan workspace utama (Q21).
-- Aturan tier S/A/B/C dan hubungan dengan temperature engine.
+- Scoring bukan lagi pertanyaan terbuka: ikuti G8/G9 (`docs/decisions.md`). Keyword/Freshness/Place/Target fit 0–5, jumlah 0–20; S≥16, A≥12, B≥8, C≥4; di bawah4 tidak tampil. Buyer roles tidak dinilai. Tabel frame6 belum dimigrasi ke kontrak ini.
 - Field wajib, validasi, dan aturan penyimpanan draft.
 - Definisi `Mine`, periode prospek baru, dan cakupan angka ringkasan.
 - Desain tablet/mobile, breakpoint, serta perilaku panel pada layar sempit.
