@@ -10,6 +10,7 @@ Updated: 2026-11-07 (Supavisor connection follow-up)
   - `nyc-dob-permits`: 147,825 signals
   - `nyc-dob-electrical`: 55,088 signals
   - seller rows: 1
+- S12 and S13 ingested on Supabase from the app VM: `austin-permits` 13,815 signals, `seattle-electrical` 20,717 signals. Rerun inserted 0. TX and WA prospects show `Outside service region` on the public URL.
 - S1 mapping follows the live API response:
   - `tracking_number` is the source record id.
   - `work_type + job_description` is the summary.
@@ -52,3 +53,6 @@ Updated: 2026-11-07 (Supavisor connection follow-up)
 
 - 2026-11-07: Initial `npm run db:init` inherited an exported `DATABASE_URL`; `tsx --env-file=.env.local` does not override exported variables, so that attempt failed before schema execution with `ENOIDENTIFIER`. Retried with `unset DATABASE_URL && npm run db:init`; it succeeded with `schema ok, sellers=1`. No tenant or routing change was needed. Operator confirmed the running tenant registration and route match `POOLER_TENANT_ID`.
 - 2026-11-07: Public URL is `https://64-177-42-81.sslip.io`. No custom domain was set; the hostname is the app VM IP via sslip.io. Caddy reverse-proxies that name to `127.0.0.1:3000` and obtained a Let's Encrypt certificate. Anonymous `HEAD /` returned HTTP 401 with the Basic Auth challenge.
+
+- 2026-11-07: S12 `austin-permits` and S13 `seattle-electrical` added. First ingest on the app VM: Austin fetched 15,286, kept 13,815, inserted 13,815; Seattle fetched 25,593, kept 20,717, inserted 20,717. Rerun inserted 0. Stored `source_url` is the portal link (Austin 13,815, Seattle 20,717; SODA fallback 0). SODA query for Austin `2025-147767 EP` and Seattle `7128541-EL` returned the same record id. Seattle portal HTML contained `7128541-EL`. Austin portal HTML is a 960-byte shell and did not contain the permit number. Companies: TX 2,684, WA 1,069. 47 signals attached to existing NY rows because `name_key` is global; those names do not get the outside-region badge. Public `/seer/{id}` for one TX and one WA company returned HTTP 200 and `Outside service region`.
+- 2026-11-07: `kliseer-deploy` crontab runs `npm run ingest` at 06:00 UTC from `/opt/kliseer/current`. Log: `/var/log/kliseer-ingest.log` (not `/opt/kliseer`, because the app lives on the `current` symlink). `README.md` documents Vultr usage, architecture, local setup, and env keys.

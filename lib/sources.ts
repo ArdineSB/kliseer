@@ -1,5 +1,5 @@
 type Row = Record<string, unknown>;
-export type Mapped = { companyName: string | null; date: string | null; summary: string; region: string | null; recordId: string | null };
+export type Mapped = { companyName: string | null; date: string | null; summary: string; region: string | null; recordId: string | null; url: string | null };
 
 export type SodaSource = {
   id: string;
@@ -13,6 +13,11 @@ export type SodaSource = {
 };
 
 const s = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null);
+function linkUrl(v: unknown): string | null {
+  if (typeof v === 'string') return s(v);
+  if (!v || typeof v !== 'object' || !('url' in v)) return null;
+  return s(v.url);
+}
 const join = (...v: unknown[]) => v.map(s).filter(Boolean).join(' · ');
 
 // Placeholder values seen live in owner/applicant name fields (S1, Nov 2026).
@@ -46,6 +51,7 @@ export const SOURCES: SodaSource[] = [
       summary: join(r.work_type, r.job_description),
       region: s(r.borough),
       recordId: s(r.tracking_number),
+      url: null,
     }),
   },
   {
@@ -61,7 +67,44 @@ export const SOURCES: SodaSource[] = [
       summary: join(r.job_description),
       region: s(r.borough),
       recordId: s(r.job_filing_number),
+      url: null,
     }),
+  },
+  {
+    id: 'austin-permits',
+    label: 'Austin issued construction permits',
+    state: 'TX',
+    endpoint: 'https://data.austintexas.gov/resource/3syk-w9eu.json',
+    dateField: 'issue_date',
+    recordIdField: 'permit_number',
+    where: "permit_class_mapped='Commercial'",
+    map: (r) => ({
+      companyName: companyOrNull(r.contractor_company_name),
+      date: s(r.issue_date),
+      summary: join(r.permit_type_desc, r.description),
+      region: s(r.original_city),
+      recordId: s(r.permit_number),
+      url: linkUrl(r.link),
+    }),
+  },
+  {
+    id: 'seattle-electrical',
+    label: 'Seattle electrical permits',
+    state: 'WA',
+    endpoint: 'https://cos-data.seattle.gov/resource/c4tj-daue.json',
+    dateField: 'issueddate',
+    recordIdField: 'permitnum',
+    map: (r) => {
+      const name = companyOrNull(r.contractorcompanyname);
+      return {
+        companyName: name && !name.toUpperCase().startsWith('BLANKET:') ? name : null,
+        date: s(r.issueddate),
+        summary: join(r.description, r.permittypemapped),
+        region: s(r.originalcity),
+        recordId: s(r.permitnum),
+        url: linkUrl(r.link),
+      };
+    },
   },
 ];
 

@@ -50,7 +50,7 @@ export async function ingestSource(src: SodaSource, sinceISO: string) {
 
     if (kept.length) {
       const companies = [...new Map(kept.map((k) => [k.key, { name: k.m.companyName!, name_key: k.key, state: src.state }])).values()];
-      // "do update" (no-op) so returning yields ids for existing rows too.
+      // ponytail: name_key is global. A TX/WA name already stored as NY keeps that row, so Outside service region is wrong for that name. Split unique to (name_key, state) if the badge must be exact.
       const ids = await sql<{ id: number; name_key: string }[]>`
         insert into companies ${sql(companies)}
         on conflict (name_key) do update set name_key = excluded.name_key
@@ -64,7 +64,7 @@ export async function ingestSource(src: SodaSource, sinceISO: string) {
         signal_date: k.m.date!.slice(0, 10),
         summary: k.m.summary || '(no description)',
         region: k.m.region,
-        source_url: sourceUrl(src, k.m.recordId!),
+        source_url: k.m.url ?? sourceUrl(src, k.m.recordId!),
         raw: sql.json(k.raw as never),
       }));
       const ins = await sql`insert into signals ${sql(signals)} on conflict (source, source_record_id) do nothing returning id`;
