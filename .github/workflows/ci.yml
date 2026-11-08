@@ -85,7 +85,7 @@ jobs:
           fi
           for attempt in $(seq 1 20); do
             status="$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3000/ || true)"
-            if [ "$status" = 401 ]; then echo 'release healthy (Basic Auth challenge returned 401)'; exit 0; fi
+            if [ "$status" = 200 ]; then echo 'release healthy (app auth active, home returns 200)'; exit 0; fi
             sleep 2
           done
           if [ -n "$previous" ]; then
