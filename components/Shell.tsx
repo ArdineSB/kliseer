@@ -15,8 +15,7 @@ export const NAV: { tab: Tab; label: string; href: string; icon: IconName }[] = 
   { tab: 'seer', label: 'Seer', href: '/seer', icon: 'eye' },
   { tab: 'signals', label: 'Signals', href: '/signals', icon: 'activity' },
   { tab: 'competitors', label: 'Competitors', href: '/competitors', icon: 'users' },
-  { tab: 'profiling', label: 'Profiling', href: '/profiling', icon: 'file' },
-  { tab: 'icp', label: 'ICP', href: '/setup/icp', icon: 'userCheck' },
+  { tab: 'contacts', label: 'Contacts', href: '/contacts', icon: 'contact' },
 ];
 
 type Props = {
@@ -55,8 +54,8 @@ export async function Shell({ tab, sellerId, chat, setupStep, children }: Props)
           </div>
         )}
         {/* G3: guest sees Log in, user sees Log out. */}
-        <div style={{ padding: '12px 8px' }}>
-          {viewer?.loggedIn ? <LogoutButton /> : <Link href="/login" className="btn btn-outline" style={{ display: 'flex' }}>Log in</Link>}
+        <div className={setupStep ? 'py-3' : 'mt-auto py-3'}>
+          {viewer?.loggedIn ? <LogoutButton /> : <Link href="/login" className="nav-item"><Icon name="logIn" />Log in</Link>}
         </div>
       </aside>
       <main className="panel">{children}</main>

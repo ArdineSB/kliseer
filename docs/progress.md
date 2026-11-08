@@ -69,4 +69,13 @@ Updated: 2026-11-08 (frontend wiring: auth, guest, upload, Seer gate, draft emai
 - Smoke (dev, port 3018): home 200 (guest cookie issued), seer 200 with gate rendered, signup 200 (guest row claimed, session cookie set), login 200, bad password 401 with `Email or password is not valid.`, upload 2-file batch → 1 ready with citation + 1 error (exact copy), draft generate 200 (LLM live, token stored), draft save 200, WCK detail shows `No contact found` + source link, Hivolts detail shows both seeded contacts. Smoke users/guests/drafts deleted after; `sellers=1` (Harborline).
 - `npm run check`, `tsc --noEmit`, `eslint .`, `npm run build` all pass.
 - Not done (out of scope this pass): landing Astro + `/app` basePath (plan step 5), score-refresh against the new materialized columns is unchanged (cron), contact auto-lookup (C0) still backend-only, auth-form visual parity with FigCraft frames unverified (vision QA unavailable this session).
+
+## Frontend revision (2026-11-08, later)
+
+- Tailwind v4 (`tailwindcss`/`@tailwindcss/postcss` 4.3.5, theme + utilities only, no preflight; legacy CSS in `@layer base`). Used on Home, prospect detail, Contacts; other pages unchanged.
+- Sidebar: Profiling and ICP removed, Contacts added. `/profiling` and `/setup/icp` still exist (setup wizard step 2).
+- Home rebuilt per frame 5013. BrandLockup `seer` path was truncated (rendered "Klis"); full path restored from `logo-concepts/kliseer-lockup.svg`.
+- Detail: disclaimer removed; per-star rule reasons; AI interpretation paragraph (`lib/analysis.ts`, `analyses` table, on-demand, never scores); Company profile (firm address from latest permit raw, contact-derived email/website/DM); contact cards with struck unavailable icons and Add contact manually.
+- Contacts: `contacts.seller_id` (null = shared seed, set = manual, owner-only view/delete). `/contacts` table + New Contact dialog; `POST /api/contacts`, `DELETE /api/contacts/[id]`. Source URL required on manual entries. Draft generate only accepts seed or own contacts.
+- Smoke (dev via SSH tunnel): home, Hivolts detail, manual add (rendered with Manual badge, then deleted; contacts back to 13), AI interpretation generated live, `/contacts` lists 14 then 13. `npm run check` (incl. `scripts/contacts.check.ts`), tsc, eslint, build pass. Schema applied with `db:init`.
 - 2026-11-07: Seer aggregate measured through an SSH tunnel from this laptop to Supabase via the app VM. `EXPLAIN ANALYZE` of the 365-day company aggregate: 3901 ms, parallel seq scan, 363 rows filtered out of 237,239 signals, 22,509 companies returned. Direct 5432 from this laptop still times out. Counts at measure time: 238,328 signals, 22,556 companies.

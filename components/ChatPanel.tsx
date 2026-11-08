@@ -1,8 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ChatMessage, Tab } from '@/lib/chat';
+import { HomeHero } from './HomeHero';
 import { Icon } from './Icon';
 
 type Props = {
@@ -10,13 +11,11 @@ type Props = {
   title?: string;
   placeholder: string;
   initial: ChatMessage[];
-  /** Home: shown instead of the message list while the thread is empty. */
-  hero?: ReactNode;
-  /** Home: suggested prompt chip under the hero (frame 5013). Fills the composer. */
-  suggestedPrompt?: string;
+  /** Home (frame 5013): hero while empty, large composer, no side-panel chrome. */
+  home?: boolean;
 };
 
-export function ChatPanel({ tab, title, placeholder, initial, hero, suggestedPrompt }: Props) {
+export function ChatPanel({ tab, title, placeholder, initial, home }: Props) {
   const router = useRouter();
   const [messages, setMessages] = useState(initial);
   const [text, setText] = useState('');
@@ -65,28 +64,33 @@ export function ChatPanel({ tab, title, placeholder, initial, hero, suggestedPro
       <button className="send" type="submit" disabled={sending || !text.trim()} aria-label="Send"><Icon name="arrowUp" /></button>
     </form>
   );
-  // Home composer per frame 5013: 844px, radius 24, context chip, Send pill, disclaimer below.
+  // Home composer per frame 5013: 844px, radius 24, sparkle + input, context chip, Send pill, disclaimer.
   const homeComposer = (
-    <div className="home-composer">
-      <form className="composer composer-lg" onSubmit={(e) => { e.preventDefault(); send(text); }}>
-        <span className="context-chip"><Icon name="userCheck" size={14} /> All workspaces</span>
-        <label htmlFor={`chat-${tab}`} className="sr-only">{placeholder}</label>
-        <textarea
-          id={`chat-${tab}`}
-          value={text}
-          placeholder={placeholder}
-          maxLength={4000}
-          rows={1}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(text); } }}
-        />
-        <button className="send-pill" type="submit" disabled={sending || !text.trim()}>Send</button>
+    <div className="mx-auto mb-4 w-[844px] max-w-[calc(100%-32px)]">
+      <form className="flex flex-col gap-3 rounded-3xl border border-input bg-canvas px-5 pt-4 pb-3 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-[var(--focus-ring)]" onSubmit={(e) => { e.preventDefault(); send(text); }}>
+        <div className="flex items-start gap-3">
+          <span className="mt-0.5 text-secondary"><Icon name="sparkle" size={18} /></span>
+          <label htmlFor={`chat-${tab}`} className="sr-only">{placeholder}</label>
+          <textarea
+            id={`chat-${tab}`}
+            className="min-h-6 flex-1 resize-none border-0 bg-transparent p-0 text-[15px] outline-none placeholder:text-secondary"
+            value={text}
+            placeholder={placeholder}
+            maxLength={4000}
+            rows={1}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(text); } }}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-2 rounded-full bg-subtle px-3 py-1.5 text-xs text-secondary"><Icon name="message" size={14} />All workspaces</span>
+          <button className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full border-0 bg-brand px-4 font-medium text-white hover:bg-brand-hover disabled:cursor-not-allowed disabled:bg-brand-disabled disabled:text-brand-disabled-ink" type="submit" disabled={sending || !text.trim()}>
+            <Icon name="arrowUp" />Send
+          </button>
+        </div>
       </form>
-      <p className="chat-disclaimer">AI can make mistakes. Review drafts and check sources before using them.</p>
+      <p className="mt-3 mb-0 text-center text-xs text-muted">AI can make mistakes. Review drafts and check sources before using them.</p>
     </div>
-  );
-  const prompt = suggestedPrompt && !text && (
-    <button type="button" className="hero-prompt" onClick={() => setText(suggestedPrompt)}>{suggestedPrompt}</button>
   );
   const error = failed && (
     <div className="chat-error" role="alert">
@@ -105,12 +109,14 @@ export function ChatPanel({ tab, title, placeholder, initial, hero, suggestedPro
     </div>
   );
 
-  if (hero) {
+  if (home) {
     return (
       <div className="home-main">
         {messages.length === 0 && !sending
-          ? <div className="home-hero">{hero}{prompt}{homeComposer}{error}</div>
-          : <>{list}{error}{homeComposer}</>}
+          ? <div className="min-h-0 flex-1 overflow-auto"><HomeHero onPrompt={setText} /></div>
+          : list}
+        {error}
+        {homeComposer}
       </div>
     );
   }

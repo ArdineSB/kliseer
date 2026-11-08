@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { ReactNode } from 'react';
+import { AnalysisText } from '@/components/AnalysisText';
+import { ContactCards } from '@/components/ContactCards';
+import { DraftPanel } from '@/components/DraftPanel';
 import { Icon } from '@/components/Icon';
 import { Shell } from '@/components/Shell';
-import { TierBadge } from '@/components/TierBadge';
 import { Topbar } from '@/components/Topbar';
 import { getProspect } from '@/lib/prospects';
 import { ensureSellerId } from '@/lib/session';
-import { DraftPanel } from '@/components/DraftPanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,13 +16,26 @@ const fmt = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US'
 
 const STAR_LABEL = { keyword: 'Keyword', freshness: 'Freshness', place: 'Place', targetFit: 'Target fit' } as const;
 type StarKey = keyof typeof STAR_LABEL;
-const starValue = (v: number | null) => (v === null ? '—' : `${v} / 5`);
+const SECTIONS = [['analysis', 'Analysis'], ['profile', 'Company profile'], ['contacts', 'Contacts'], ['email-draft', 'Email draft'], ['sources', 'Sources']] as const;
+const TIER_STYLE: Record<string, string> = { S: 'bg-[var(--tier-s-bg)] text-success', A: 'bg-[var(--tier-a-bg)] text-[var(--tier-a-text)]', B: 'bg-[var(--tier-b-bg)] text-[var(--tier-b-text)]' };
 
-function Stars({ n }: { n: number | null }) {
+function Stars({ n, label }: { n: number | null; label: string }) {
   return (
-    <span aria-hidden="true" style={{ letterSpacing: 1, color: 'var(--action-primary)' }}>
-      {Array.from({ length: 5 }, (_, i) => (n !== null && i < n ? '★' : '☆')).join('')}
+    <span className="flex gap-0.5 text-brand" role="img" aria-label={n === null ? `${label}: not scored` : `${label}: ${n} of 5 stars`}>
+      {Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={20} filled={n !== null && i < n} />)}
     </span>
+  );
+}
+
+function Section({ id, title, right, children }: { id: string; title: string; right?: ReactNode; children: ReactNode }) {
+  return (
+    <section id={id} aria-labelledby={`${id}-h`} className="mt-5 scroll-mt-4 rounded-xl border border-line bg-canvas p-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 id={`${id}-h`} className="text-[17px]">{title}</h2>
+        {right}
+      </div>
+      {children}
+    </section>
   );
 }
 
@@ -31,98 +46,94 @@ export default async function ProspectPage({ params }: PageProps<'/seer/[id]'>) 
   const p = await getProspect(sellerId, id);
   if (!p) notFound();
   const region = [...new Set(p.signals.map((s) => s.region).filter(Boolean))].slice(0, 3).join(', ');
-  const starRows = (Object.keys(STAR_LABEL) as StarKey[]).map((k) => ({ key: k, label: STAR_LABEL[k], value: p.stars[k] }));
+  const domain = p.contacts.find((c) => c.website)?.website?.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+  const starRows = (Object.keys(STAR_LABEL) as StarKey[]).map((k) => ({ key: k, label: STAR_LABEL[k], value: p.stars[k], reason: p.reasons[k] }));
 
   return (
     <Shell tab="seer" sellerId={sellerId} chat={{ tab: 'seer', title: 'Seer chat', placeholder: 'Ask about these prospects…' }}>
       <Topbar crumbs={['Seer', 'Prospects', p.name]} />
       <div className="content">
-        <Link href="/seer" className="link" style={{ color: 'var(--text-secondary)', marginBottom: 20 }}><Icon name="arrowLeft" /> Back to prospects</Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 20 }}>
-          <h1 style={{ margin: 0 }}>{p.name}</h1>
-          <TierBadge tier={p.tier} />
-        </div>
-        <p className="lede" style={{ marginTop: 4 }}>
-          {[region, p.state].filter(Boolean).join(' · ')}
-          {p.outsideRegion && <> · <span className="badge badge-warn">Outside service region</span></>}
-        </p>
+        <div className="mx-auto max-w-[808px]">
+          <Link href="/seer" className="inline-flex h-9 items-center rounded-lg border border-line px-5 text-[13px] hover:bg-subtle">Back to prospects</Link>
+          <h1 className="mt-7 mb-1 text-[28px] leading-9">{p.name}</h1>
+          <p className="m-0 text-secondary">
+            {[domain, region && `${region}, ${p.state}`].filter(Boolean).join(' · ') || p.state}
+            {p.outsideRegion && <> · <span className="badge badge-warn">Outside service region</span></>}
+          </p>
 
-        {/* Analysis — four 0–5 star rows + overall; scores are materialized, never LLM-computed (G8). */}
-        <section className="card" style={{ marginTop: 24 }} aria-labelledby="analysis">
-          <div className="card-head">
-            <h2 id="analysis" style={{ fontSize: 14 }}>Analysis</h2>
-            <span className="num" style={{ fontWeight: 600 }}>Overall {p.score ?? '—'} / 20</span>
-          </div>
-          <div className="card-body">
-            {starRows.map((r) => (
-              <div key={r.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0' }}>
-                <span>{r.label}</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <Stars n={r.value} />
-                  <b className="num">{starValue(r.value)}</b>
-                </span>
-              </div>
+          <nav aria-label="Sections" className="mt-8 flex flex-wrap gap-2.5">
+            {SECTIONS.map(([sid, label]) => (
+              <a key={sid} href={`#${sid}`} className="inline-flex h-9 items-center rounded-lg border border-line px-7 text-[13px] hover:bg-subtle">{label}</a>
             ))}
-            <p className="muted" style={{ fontSize: 12, margin: '10px 0 0' }}>
-              Scores are computed from dated public signals only. AI writes the interpretation below and never the scores.
-            </p>
-          </div>
-        </section>
+          </nav>
 
-        {/* Contacts — seeded rows with sourceUrl per field (Q12/Q18). No row → honest not-found. */}
-        <section className="card" style={{ marginTop: 16 }} aria-labelledby="contacts">
-          <div className="card-head"><h2 id="contacts" style={{ fontSize: 14 }}>Contacts</h2></div>
-          {p.contacts.length === 0 ? (
-            <div className="card-body muted">No contact found. <a href={p.signals[0]?.url ?? '/seer'} target="_blank" rel="noopener noreferrer" className="link">See the source record</a></div>
-          ) : (
-            <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-              {p.contacts.map((c) => (
-                <li key={c.id} className="card-body" style={{ borderTop: '1px solid var(--border-row)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <span className="brand-mark" aria-hidden="true" style={{ textTransform: 'uppercase' }}>{c.name.slice(0, 1)}</span>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 600 }}>{c.name}{c.title ? <span className="muted" style={{ fontWeight: 400 }}> · {c.title}</span> : null}</div>
-                    <div className="muted" style={{ fontSize: 12 }}>
-                      {c.email ? <a href={`mailto:${c.email}`} className="link" style={{ marginRight: 8 }}>{c.email}</a> : <span style={{ marginRight: 8 }}>Email: not found</span>}
-                      <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="link">Source</a>
+          {/* Analysis — G8 stars are materialized by rules; AI only writes the paragraph. */}
+          <Section id="analysis" title="Analysis" right={
+            <span className="flex items-center gap-3">
+              <b className="num text-[15px] font-semibold">Overall {p.score ?? '—'} / 20</b>
+              <span className={`rounded-md px-6 py-1.5 text-[13px] font-medium ${TIER_STYLE[p.tier] ?? 'bg-[var(--tier-neutral-bg)] text-[var(--tier-neutral-text)]'}`}>Tier {p.tier}</span>
+            </span>
+          }>
+            <div className="flex flex-col">
+              {starRows.map((r, i) => (
+                <div key={r.key} className={`grid grid-cols-[116px_auto_56px_1fr] items-center gap-3 rounded-md px-3 py-3 ${i % 2 === 0 ? 'bg-subtle' : ''}`}>
+                  <span className="text-[13px]">{r.label}</span>
+                  <Stars n={r.value} label={r.label} />
+                  <b className="num text-[13px] font-normal">{r.value === null ? '—' : `${r.value} / 5`}</b>
+                  <span className="text-[13px] text-secondary">{r.reason}</span>
+                </div>
+              ))}
+            </div>
+            <AnalysisText companyId={p.id} initial={p.analysis} />
+          </Section>
+
+          <section id="profile" aria-labelledby="profile-h" className="mt-5 scroll-mt-4 overflow-hidden rounded-xl border border-line bg-canvas">
+            <h2 id="profile-h" className="px-5 pt-5 pb-3 text-[17px]">Company profile</h2>
+            <dl className="m-0">
+              {p.profile.map((r) => (
+                <div key={r.label} className="grid grid-cols-[160px_1fr_auto] gap-4 border-t border-row px-5 py-3 text-[13px]">
+                  <dt className="text-label">{r.label}</dt>
+                  <dd className={`m-0 text-[14px] ${r.value ? '' : 'text-muted'}`}>{r.value ?? 'Not found'}</dd>
+                  <dd className="m-0">{r.url && <a href={r.url} target="_blank" rel="noopener noreferrer" className="link text-xs">Source<span className="sr-only"> for {r.label} (opens in new tab)</span></a>}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <Section id="contacts" title="Contacts">
+            <ContactCards company={{ id: p.id, name: p.name }} contacts={p.contacts} fallbackSource={p.signals[0]?.url ?? null} />
+          </Section>
+
+          {/* Email draft — one stored row per (seller, prospect); {contact.name} replaced at display (Q8). */}
+          <DraftPanel companyId={p.id} companyName={p.name} contacts={p.contacts.map((c) => ({ id: c.id, name: c.name }))} draft={p.draft} />
+
+          {/* Sources last (DESIGN.md frame 7–9 order). */}
+          <section id="sources" aria-labelledby="sources-h" className="mt-5 mb-8 scroll-mt-4 overflow-hidden rounded-xl border border-line bg-canvas">
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <h2 id="sources-h" className="text-[17px]">Sources</h2>
+              <span className="text-xs text-muted">{p.totalSignals} signals</span>
+            </div>
+            {p.signals.length === 0 ? (
+              <div className="border-t border-row px-5 py-4 text-muted"><Icon name="activity" /> No signals from connected sources.</div>
+            ) : (
+              <ul className="m-0 list-none p-0">
+                {p.signals.slice(0, 20).map((s) => (
+                  <li key={s.id} className="signal">
+                    <div>
+                      <div className="num">{fmt(s.date)}</div>
+                      <span className="badge mt-1">Permit</span>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        {/* Email draft — one stored row per (seller, prospect); {contact.name} replaced at display (Q8). */}
-        <DraftPanel
-          companyId={p.id}
-          companyName={p.name}
-          contacts={p.contacts.map((c) => ({ id: c.id, name: c.name }))}
-          draft={p.draft}
-        />
-
-        {/* Sources last (DESIGN.md frame 7–9 order). */}
-        <section className="card" style={{ marginTop: 16 }} aria-labelledby="sources">
-          <div className="card-head"><h2 id="sources" style={{ fontSize: 14 }}>Sources</h2><span className="muted" style={{ fontSize: 12 }}>{p.totalSignals} signals</span></div>
-          {p.signals.length === 0 ? (
-            <div className="card-body muted"><Icon name="activity" /> No signals from connected sources.</div>
-          ) : (
-            <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-              {p.signals.slice(0, 20).map((s) => (
-                <li key={s.id} className="signal">
-                  <div>
-                    <div className="num">{fmt(s.date)}</div>
-                    <span className="badge" style={{ marginTop: 4 }}>Permit</span>
-                  </div>
-                  <div>
-                    <div>{s.summary}</div>
-                    <div className="why">{s.matched.length ? `Matched ${s.matched.map((m) => `"${m}"`).join(', ')} in permit description` : 'No product keyword matched'} · {s.source}</div>
-                  </div>
-                  <a href={s.url} target="_blank" rel="noopener noreferrer" className="link" style={{ whiteSpace: 'nowrap' }}>Source record <Icon name="external" size={14} /><span className="sr-only">(opens in new tab)</span></a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+                    <div>
+                      <div>{s.summary}</div>
+                      <div className="why">{s.matched.length ? `Matched ${s.matched.map((m) => `"${m}"`).join(', ')} in permit description` : 'No product keyword matched'} · {s.source}</div>
+                    </div>
+                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="link whitespace-nowrap">Source record <Icon name="external" size={14} /><span className="sr-only">(opens in new tab)</span></a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </div>
       </div>
     </Shell>
   );

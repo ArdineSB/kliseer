@@ -1,3 +1,9 @@
+/* Tailwind theme + utilities only. No preflight: legacy pages keep their reset below.
+   Legacy rules sit in @layer base so utilities always win where both apply. */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
 /* Kliseer tokens · Mode 1 (copied from design/tokens.css) */
 :root {
   --surface-shell: #F2F2F4;
@@ -44,6 +50,31 @@
 
   --shadow-surface: 0 1px 3px rgba(20, 20, 40, 0.06);
 }
+
+@theme inline {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --color-canvas: var(--surface-canvas);
+  --color-subtle: var(--surface-subtle);
+  --color-note: var(--surface-note);
+  --color-ink: var(--text-primary);
+  --color-label: var(--text-label);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-line: var(--border-default);
+  --color-row: var(--border-row);
+  --color-input: var(--border-input);
+  --color-brand: var(--action-primary);
+  --color-brand-hover: var(--action-primary-hover);
+  --color-brand-soft: var(--navigation-active-bg);
+  --color-brand-disabled: var(--action-disabled-bg);
+  --color-brand-disabled-ink: var(--action-disabled-text);
+  --color-hover: var(--navigation-hover-bg);
+  --color-success: var(--status-success);
+  --color-error: var(--status-error);
+  --color-linkedin: #0A66C2;
+}
+
+@layer base {
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
@@ -214,47 +245,13 @@ td .sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 .send:disabled { background: var(--action-disabled-bg); color: var(--action-disabled-text); cursor: not-allowed; }
 .chat-error { margin: 0 16px 8px; font-size: 12px; color: var(--status-error); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 
-/* Home — frame 5013: history column 216px, centered hero 844px, gradient assistant card */
-.home { display: grid; grid-template-columns: 216px 1fr; flex: 1; min-height: 0; }
-.history { background: var(--surface-note); border-right: 1px solid var(--border-default); padding: 20px 16px; overflow: auto; }
-.history header { margin-bottom: 16px; }
-.history header h2 { font-size: 16px; margin: 0; }
-.history header .muted { font-size: 12px; display: block; margin-top: 2px; }
-.history h3 { font-size: 12px; font-weight: 400; color: var(--text-muted); margin: 20px 8px 6px; }
-.history a { display: block; padding: 7px 8px; border-radius: 6px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.history a:hover { background: var(--navigation-hover-bg); }
-.history .history-empty { font-size: 12px; margin: 12px 8px; }
-.new-chat { width: 100%; height: 36px; border: 1.5px solid transparent; border-radius: 10px; background:
-  linear-gradient(var(--surface-canvas), var(--surface-canvas)) padding-box,
-  linear-gradient(135deg, #5B21B6 0%, #8B5CF6 50%, #6D28D9 100%) border-box;
-  color: var(--text-primary); font-weight: 600; display: flex; align-items: center; justify-content: center; }
-.home-main { display: flex; flex-direction: column; min-height: 0; }
+/* Home message list (thread view); hero/composer are Tailwind in ChatPanel. */
+.home-main { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 .home-main .messages { max-width: 680px; width: 100%; margin: 0 auto; }
 .home-main .msg { max-width: 520px; }
-.home-hero { margin: auto auto 0; width: 844px; max-width: 100%; padding: 24px 24px 0; }
-.hero-kicker { font-size: 12px; font-weight: 500; color: var(--action-primary); margin: 0 0 8px; }
-.home-hero h1 { font-size: 24px; line-height: 32px; }
-.hero-sub { color: var(--text-secondary); margin: 4px 0 20px; }
-.hero-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
-.hero-card { border: 1px solid var(--border-default); border-radius: 10px; padding: 16px; background: var(--surface-canvas); display: flex; flex-direction: column; gap: 6px; }
-a.hero-card:hover { border-color: var(--selection-border); }
-.hero-card b { font-size: 14px; font-weight: 600; }
-.hero-card span { font-size: 12px; color: var(--text-secondary); }
-.hero-card.assistant { border: 1.5px solid transparent; border-radius: 10px; background:
+.gradient-border { border: 1.5px solid transparent; background:
   linear-gradient(var(--surface-canvas), var(--surface-canvas)) padding-box,
   linear-gradient(135deg, #5B21B6 0%, #8B5CF6 50%, #6D28D9 100%) border-box; }
-.hero-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.hero-actions .btn { height: 36px; }
-.hero-prompt { border: 0; background: var(--surface-subtle); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--text-secondary); cursor: pointer; margin-bottom: 12px; text-align: left; }
-.hero-prompt:hover { background: var(--navigation-hover-bg); }
-.home-composer { margin: 0 auto 24px; width: 844px; max-width: calc(100% - 32px); }
-.home-composer .composer-lg { display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border-input); border-radius: 24px; padding: 12px 14px; margin: 12px 0 8px; }
-.home-composer .composer-lg:focus-within { outline: 2px solid var(--focus-ring); outline-offset: -1px; }
-.home-composer textarea { width: 100%; border: 0; outline: 0; resize: none; min-height: 36px; padding: 4px 2px; background: none; }
-.context-chip { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; background: var(--surface-subtle); border-radius: 16px; padding: 4px 12px; font-size: 12px; color: var(--text-secondary); }
-.send-pill { align-self: flex-end; height: 36px; padding: 0 20px; border-radius: 18px; border: 0; background: var(--action-primary); color: #fff; font-weight: 500; cursor: pointer; }
-.send-pill:disabled { background: var(--action-disabled-bg); color: var(--action-disabled-text); cursor: not-allowed; }
-.chat-disclaimer { font-size: 12px; line-height: 18px; color: var(--text-muted); text-align: center; margin: 0; }
 
 /* Auth — full-canvas layout per auth/login frames: canvas 1424×884, form 400px at left, buttons 44px */
 .auth-wrap { min-height: 100vh; background: var(--surface-shell); padding: 8px; }
@@ -272,3 +269,4 @@ a.hero-card:hover { border-color: var(--selection-border); }
 .auth-submit { width: 100%; height: 44px; }
 .auth-explore { width: 100%; height: 44px; margin-top: 12px; border-color: var(--border-input); }
 .auth-switch { font-size: 14px; line-height: 20px; color: var(--text-secondary); text-align: center; margin-top: 24px; }
+}

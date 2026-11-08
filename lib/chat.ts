@@ -3,7 +3,7 @@ import { llm, LLM_MODEL } from './llm';
 import { cleanFields, FIELDS, type FieldValue, type Section } from './fields';
 import { getSeller, saveSection } from './seller';
 
-export const TABS = ['home', 'klise', 'target', 'seer', 'signals', 'competitors', 'profiling', 'icp'] as const;
+export const TABS = ['home', 'klise', 'target', 'seer', 'signals', 'competitors', 'contacts', 'profiling', 'icp'] as const;
 export type Tab = (typeof TABS)[number];
 export type ChatMessage = { id: number; tab: Tab; role: 'user' | 'assistant'; content: string; created_at: string };
 

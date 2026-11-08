@@ -72,6 +72,17 @@ create table if not exists contacts (
   social_url text,
   source_url text not null
 );
+-- Manual contacts belong to the seller who added them; null = shared seed row (C6).
+alter table contacts add column if not exists seller_id int references sellers(id) on delete cascade;
+create index if not exists contacts_company on contacts(company_id);
+-- AI interpretation paragraph per (seller, prospect). Scores stay rule-based (G8).
+create table if not exists analyses (
+  seller_id int not null references sellers(id) on delete cascade,
+  company_id int not null references companies(id) on delete cascade,
+  body text not null,
+  updated_at timestamptz not null default now(),
+  primary key (seller_id, company_id)
+);
 create table if not exists email_drafts (
   id serial primary key,
   seller_id int not null references sellers(id) on delete cascade,

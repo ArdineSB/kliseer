@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Icon } from './Icon';
 
 /** POST /api/auth/logout then drop to the guest path (same visitor keeps guest data). */
 export function LogoutButton() {
@@ -10,7 +11,7 @@ export function LogoutButton() {
   return (
     <button
       type="button"
-      className="btn btn-outline"
+      className="nav-item w-full cursor-pointer bg-transparent text-left"
       disabled={busy}
       onClick={async () => {
         setBusy(true);
@@ -19,7 +20,7 @@ export function LogoutButton() {
         router.refresh();
       }}
     >
-      Log out
+      <Icon name="logOut" />Log out
     </button>
   );
 }

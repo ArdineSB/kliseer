@@ -16,7 +16,7 @@ export async function POST(req: Request, ctx: Ctx) {
   if (typeof body.contactId !== 'number' || !Number.isInteger(body.contactId)) return Response.json({ error: 'contactId required' }, { status: 400 });
   const sellerId = await ensureSellerId();
   const [contact] = await sql<{ name: string; email: string | null }[]>`
-    select name, email from contacts where id = ${body.contactId} and company_id = ${id}`;
+    select name, email from contacts where id = ${body.contactId} and company_id = ${id} and (seller_id is null or seller_id = ${sellerId})`;
   if (!contact) return Response.json({ error: 'contact not found' }, { status: 404 });
   const p = await getProspect(sellerId, id);
   if (!p) return Response.json({ error: 'not found' }, { status: 404 });
