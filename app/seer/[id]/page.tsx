@@ -7,8 +7,10 @@ import { DraftPanel } from '@/components/DraftPanel';
 import { Icon } from '@/components/Icon';
 import { Shell } from '@/components/Shell';
 import { Topbar } from '@/components/Topbar';
+import { sql } from '@/lib/db';
+import { LOOKUP_LIMIT } from '@/lib/lookup';
+import { getViewer, ensureSellerId } from '@/lib/session';
 import { getProspect } from '@/lib/prospects';
-import { ensureSellerId } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,6 +44,13 @@ function Section({ id, title, right, children }: { id: string; title: string; ri
 export default async function ProspectPage({ params }: PageProps<'/seer/[id]'>) {
   const id = Number((await params).id);
   if (!Number.isInteger(id) || id <= 0) notFound();
+  const viewer = (await getViewer()) ?? { sellerId: await ensureSellerId(), loggedIn: false };
+  let lookupQuota: number | null = null;
+  if (viewer.loggedIn) {
+    const [{ used }] = await sql<{ used: number }[]>`select count(*)::int as used from contact_lookups
+      where seller_id = ${viewer.sellerId} and created_at >= date_trunc('month', now())`;
+    lookupQuota = LOOKUP_LIMIT - used;
+  }
   const sellerId = await ensureSellerId();
   const p = await getProspect(sellerId, id);
   if (!p) notFound();
@@ -101,7 +110,7 @@ export default async function ProspectPage({ params }: PageProps<'/seer/[id]'>) 
           </section>
 
           <Section id="contacts" title="Contacts">
-            <ContactCards company={{ id: p.id, name: p.name }} contacts={p.contacts} fallbackSource={p.signals[0]?.url ?? null} />
+            <ContactCards company={{ id: p.id, name: p.name }} contacts={p.contacts} fallbackSource={p.signals[0]?.url ?? null} canLookup={viewer.loggedIn} quotaLeft={lookupQuota} />
           </Section>
 
           {/* Email draft — one stored row per (seller, prospect); {contact.name} replaced at display (Q8). */}

@@ -19,6 +19,9 @@
 
 # production
 /build
+/landing/dist/
+/landing/.astro/
+/landing/public/motion/
 
 # misc
 .DS_Store
@@ -41,3 +44,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .agents/
+.claude/
+skills-lock.json
+node_modules/

@@ -26,7 +26,7 @@ function Card({ c }: { c: Contact }) {
   async function remove() {
     setMenu(false);
     if (!confirm(`Delete ${c.name}?`)) return;
-    const res = await fetch(`/api/contacts/${c.id}`, { method: 'DELETE' }).catch(() => null);
+    const res = await fetch(`/app/api/contacts/${c.id}`, { method: 'DELETE' }).catch(() => null);
     if (res?.ok) router.refresh();
   }
   return (
@@ -63,21 +63,45 @@ function Card({ c }: { c: Contact }) {
   );
 }
 
-/** Contacts section on the prospect detail (frame 7). */
-export function ContactCards({ company, contacts, fallbackSource }: { company: { id: number; name: string }; contacts: Contact[]; fallbackSource: string | null }) {
+/** Prospect-detail Contacts panel (frame 7). "Search publicly" = free-path auto-lookup (C0). */
+export function ContactCards({ company, contacts, fallbackSource, canLookup, quotaLeft }: { company: { id: number; name: string }; contacts: Contact[]; fallbackSource: string | null; canLookup: boolean; quotaLeft: number | null }) {
   const [adding, setAdding] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [result, setResult] = useState<{ note: string; error?: boolean } | null>(null);
+  const router = useRouter();
   const linkedin = contacts.find((c) => c.linkedinUrl)?.linkedinUrl;
+
+  async function searchPublicly() {
+    setSearching(true);
+    setResult(null);
+    const res = await fetch(`/app/api/prospects/${company.id}/lookup`, { method: 'POST' }).catch(() => null);
+    setSearching(false);
+    const data = res ? await res.json().catch(() => null) : null;
+    if (!res?.ok) return setResult({ note: data?.error ?? 'Search failed. Try again.', error: true });
+    setResult({ note: data.note });
+    router.refresh();
+  }
+
   return (
     <>
       {contacts.length === 0 ? (
         <div className="rounded-xl border border-dashed border-line px-5 py-6 text-secondary">
           <p className="m-0 font-medium text-ink">No contact found</p>
-          <p className="mt-1 mb-0 text-[13px]">Phone: not found{fallbackSource && <> · <a href={fallbackSource} target="_blank" rel="noopener noreferrer" className="link">See the source record</a></>}</p>
+          <p className="mt-1 mb-0 text-[13px]">Phone: not found{fallbackSource && (<> · <a href={fallbackSource} target="_blank" rel="noopener noreferrer" className="link">See the source record</a></>)}</p>
         </div>
       ) : (
         <ul className="m-0 grid list-none grid-cols-2 gap-4 p-0">{contacts.map((c) => <Card key={c.id} c={c} />)}</ul>
       )}
-      <div className="mt-4 flex flex-wrap gap-3">
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        {canLookup ? (
+          <button type="button" className="btn btn-outline" onClick={searchPublicly} disabled={searching || (quotaLeft !== null && quotaLeft <= 0)} title={quotaLeft !== null ? `${quotaLeft} of 5 monthly searches left` : undefined}>
+            <Icon name="search" />{searching ? 'Searching…' : 'Search publicly'}
+          </button>
+        ) : (
+          <a href="/app/login" className="btn btn-outline"><Icon name="search" />Log in to search contacts</a>
+        )}
+        {canLookup && quotaLeft !== null && <span className="text-xs text-muted">{quotaLeft} of 5 monthly searches left</span>}
+        {result && <span role="status" className={`text-[13px] ${result.error ? 'text-error' : 'text-secondary'}`}>{result.note}</span>}
         {linkedin && <a href={linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-outline">Open LinkedIn <Icon name="arrowRight" size={14} /></a>}
         {!adding && <button type="button" className="btn btn-outline" onClick={() => setAdding(true)}><Icon name="plus" />Add contact manually</button>}
       </div>

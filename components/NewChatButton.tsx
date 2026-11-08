@@ -15,7 +15,7 @@ export function NewChatButton({ variant }: Props) {
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch('/api/chat/threads', {
+      const res = await fetch('/app/api/chat/threads', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ tab: 'home' }),

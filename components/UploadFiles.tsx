@@ -38,7 +38,7 @@ export function UploadFiles() {
     try {
       const body = new FormData();
       for (const f of valid) body.append('files', f);
-      const res = await fetch('/api/upload', { method: 'POST', body });
+      const res = await fetch('/app/api/upload', { method: 'POST', body });
       const data = (await res.json().catch(() => ({}))) as { files?: { name: string; size: number; status: 'ready' | 'error'; error?: string; fields?: Field[] }[] };
       setRows((prev) => prev.map((r) => {
         if (r.status !== 'reading') return r;

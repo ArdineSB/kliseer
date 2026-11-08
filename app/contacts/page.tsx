@@ -38,7 +38,7 @@ export default async function ContactsPage({ searchParams }: PageProps<'/contact
           <NewContactButton />
         </div>
 
-        <form className="toolbar" action="/contacts" role="search">
+        <form className="toolbar" action="/app/contacts" role="search">
           <div className="search">
             <Icon name="search" />
             <label htmlFor="contacts-q" className="sr-only">Search contacts</label>

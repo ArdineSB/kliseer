@@ -13,7 +13,7 @@ export function LoadDemoButton() {
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch('/api/seller/demo', { method: 'POST' });
+      const res = await fetch('/app/api/seller/demo', { method: 'POST' });
       const result = await res.json().catch(() => null);
       if (!res.ok) throw new Error(typeof result?.error === 'string' ? result.error : 'Could not load demo data. Try again.');
       router.refresh();

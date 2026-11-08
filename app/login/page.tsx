@@ -6,6 +6,6 @@ export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Log in · Kliseer' };
 
 export default async function LoginPage() {
-  if ((await getViewer())?.loggedIn) redirect('/');
+  if ((await getViewer())?.loggedIn) redirect('/app/');
   return <AuthForm mode="login" />;
 }

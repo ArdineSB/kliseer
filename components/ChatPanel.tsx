@@ -38,7 +38,7 @@ export function ChatPanel({ tab, threadId, title, placeholder, initial, home }: 
       setText('');
     }
     try {
-      const res = await fetch('/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ tab, threadId, message }) });
+      const res = await fetch('/app/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ tab, threadId, message }) });
       if (!res.ok) throw new Error();
       const r: { user: ChatMessage; assistant: ChatMessage; drafts: Record<string, unknown> } = await res.json();
       setMessages((m) => [...m.filter((x) => x.id > 0 && x.id !== r.user.id), r.user, r.assistant]);

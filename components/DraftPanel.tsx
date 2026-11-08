@@ -33,7 +33,7 @@ export function DraftPanel({ companyId, companyName, contacts, draft }: Props) {
     setStatus('generating');
     setError(null);
     try {
-      const res = await fetch(`/api/prospects/${companyId}/draft`, {
+      const res = await fetch(`/app/api/prospects/${companyId}/draft`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contactId: contact.id }),
@@ -54,7 +54,7 @@ export function DraftPanel({ companyId, companyName, contacts, draft }: Props) {
     setStatus('generating');
     setError(null);
     try {
-      const res = await fetch(`/api/prospects/${companyId}/draft`, {
+      const res = await fetch(`/app/api/prospects/${companyId}/draft`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ subject, body }),

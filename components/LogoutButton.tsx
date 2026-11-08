@@ -16,7 +16,7 @@ export function LogoutButton() {
       title="Log out"
       onClick={async () => {
         setBusy(true);
-        await fetch('/api/auth/logout', { method: 'POST' }).catch(() => null);
+        await fetch('/app/api/auth/logout', { method: 'POST' }).catch(() => null);
         router.push('/');
         router.refresh();
       }}

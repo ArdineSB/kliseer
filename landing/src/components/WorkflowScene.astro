@@ -1,0 +1,51 @@
+---
+import Icon from './Icon.astro';
+interface Props { kind: 'understand' | 'target' | 'prospects' | 'move'; title: string; }
+const { kind, title } = Astro.props;
+const labels = { understand: 'Klise / Company', target: 'Target / Market', prospects: 'Seer / Prospects', move: 'Seer / Hivolts / Email draft' };
+---
+<figure class:list={['demo', `demo--${kind}`]} data-demo={kind} data-phase="final" aria-label={`${title}: illustrated product workflow`}>
+  <div class="demo-topbar"><span>{labels[kind]}</span><span class="demo-badge">Illustrated workflow</span></div>
+  <div class="demo-body">
+    {kind === 'understand' && <>
+      <div class="demo-heading"><h3>Company background</h3><span class="ui-button" data-hit="1"><Icon name="file" size={16} />Upload files</span></div>
+      <p class="ui-muted">Start with the information you already have.</p>
+      <div class="upload-zone"><Icon name="file" size={28} /><strong>Company documents</strong><span>PDF, MD or TXT · 2 MB per file</span></div>
+      <div class="file-rows" data-reveal="1">
+        <div><Icon name="file" size={17} /><span>company-overview.md</span><span class="ui-success"><Icon name="check" size={14} />Ready</span></div>
+        <div><Icon name="file" size={17} /><span>product-catalog.pdf</span><span class="ui-success"><Icon name="check" size={14} />Ready</span></div>
+      </div>
+      <div class="draft-field" data-hit="2"><span class="field-label">Company name<span class="draft-tag">Draft</span></span><div data-reveal="2"><strong>Harborline Electrical Supply</strong><p class="quote">“Harborline Electrical Supply”<small>company-overview.md · illustrative source file</small></p></div></div>
+      <p class="ui-note">Fictional seller study case. Extracted values stay drafts until reviewed. Original files are not stored.</p>
+    </>}
+    {kind === 'target' && <>
+      <div class="demo-heading"><h3>Define your market</h3><span class="draft-tag">Draft</span></div>
+      <p class="ui-muted">Give the search a direction.</p>
+      <div class="target-field"><span class="field-label">Regions</span><div class="ui-input" data-hit="1"><span data-reveal="1" class="chip">New York</span><span data-reveal="1" class="chip">New Jersey</span></div></div>
+      <div class="target-field"><span class="field-label">Buyer roles</span><div class="ui-input" data-hit="2"><span data-reveal="2" class="chip">Operations Manager</span></div></div>
+      <div class="target-field"><span class="field-label">Company types</span><div class="ui-input ui-muted">Not specified in this snapshot</div></div>
+      <p class="ui-note">Buyer roles guide outreach; they do not contribute to the prospect score. Example target settings, not a live search.</p>
+    </>}
+    {kind === 'prospects' && <>
+      <div class="demo-heading"><h3>Prospects</h3><span class="ui-muted">Saved signals</span></div>
+      <div class="mini-table" role="table" aria-label="Historical prospect snapshot from November 7, 2026">
+        <div class="mini-row mini-head" role="row"><span role="columnheader">Company</span><span role="columnheader">Score</span><span role="columnheader">Tier</span></div>
+        <div class="mini-row" role="row"><span role="cell">WCK Electric Corp.</span><span role="cell">16/20</span><span role="cell" class="tier">S</span></div>
+        <div class="mini-row selected-prospect" role="row" data-hit="1"><span role="cell"><strong>Hivolts Electrical Inc</strong></span><span role="cell">16/20</span><span role="cell" class="tier">S</span></div>
+        <div class="mini-row" role="row"><span role="cell">A &amp; S Electric Inc.</span><span role="cell">16/20</span><span role="cell" class="tier">S</span></div>
+      </div>
+      <div class="signal-focus" data-reveal="1"><div class="field-label">Hivolts Electrical Inc<span class="tier">Tier S</span></div><h4>Temporary power / generator-hoist work</h4><p>NYC DOB electrical permit · Nov 1, 2026</p><span class="ui-link" data-hit="2">View supporting source <Icon name="external" size={14} /></span></div>
+      <p class="ui-note" data-reveal="2">Historical Nov 7, 2026 score snapshot. A match is a reason to investigate, not proof of buying intent.</p>
+    </>}
+    {kind === 'move' && <>
+      <div class="demo-heading"><h3>Email draft</h3><span class="draft-tag">For your review</span></div>
+      <div class="recipient" data-hit="1"><span class="contact-avatar">MR</span><div><strong>Moishy Rosman</strong><span>Operations Manager · Hivolts</span></div><Icon name="chevron" size={16} /></div>
+      <p class="contact-source" data-reveal="1">moishy@hivoltselectrical.com<br />Provider-supplied seed contact · not deliverability-verified</p>
+      <span class="ui-button ui-button--primary" data-hit="2">Generate draft</span>
+      <div class="email-preview" data-reveal="2"><div><span>Subject</span><strong>Electrical supply coordination</strong></div><p>Hi Moishy Rosman,</p><p>Would it be useful to discuss electrical supply requirements for upcoming work?</p><p class="ui-muted">Illustrative outreach copy — review and edit before use.</p></div>
+      <p class="ui-note">You choose the next step. Kliseer does not send this email.</p>
+    </>}
+  </div>
+  <span class="demo-cursor" aria-hidden="true"><Icon name="cursor" size={26} /></span>
+  <figcaption class="demo-caption"><span>Product demonstration · not a live request</span><button type="button" class="replay" data-replay hidden aria-label={`Replay ${title}`}><Icon name="replay" size={15} />Replay</button></figcaption>
+</figure>

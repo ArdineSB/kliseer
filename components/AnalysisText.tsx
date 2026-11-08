@@ -11,7 +11,7 @@ export function AnalysisText({ companyId, initial }: { companyId: number; initia
   async function generate() {
     setBusy(true);
     setError(false);
-    const res = await fetch(`/api/prospects/${companyId}/analysis`, { method: 'POST' }).catch(() => null);
+    const res = await fetch(`/app/api/prospects/${companyId}/analysis`, { method: 'POST' }).catch(() => null);
     setBusy(false);
     const data: unknown = res?.ok ? await res.json().catch(() => null) : null;
     if (!data || typeof data !== 'object' || !('body' in data) || typeof data.body !== 'string') return setError(true);

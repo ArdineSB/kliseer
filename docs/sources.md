@@ -386,6 +386,8 @@ Company masuk enrichment queue
 - Kontak tanpa sourceUrl tidak ditampilkan (aturan provenance).
 - Coverage Step A diukur 7 Nov pada 10 perusahaan guest: homepage saja 1/10, tambah `/contact` `/about` `/team` jadi 4/10. 40 halaman semuanya bisa di-crawl (HTTP 200).
 
+**Runtime 8 Nov 2026:** auto-lookup sudah jalan (bukan desain saja). `lib/lookup.ts` + `POST /app/api/prospects/[id]/lookup`: DuckDuckGo HTML dibaca lewat `r.jina.ai` (dua query: `"<company> <state> contact email phone"` dan `"<company> linkedin"`), snippet hasil pencarian = kutipan halaman sumber, tiga halaman teratas di-crawl penuh paralel (halaman CAPTCHA dibuang), LLM ekstrak ≤5 kontak JSON, validasi ketat `cleanContact` + pencocokan sourceUrl dengan halaman yang benar-benar dibaca. Login wajib, kuota 5/bulan per seller (tabel `contact_lookups`), lookup tanpa hasil tetap memotong kuota. Tombol "Search publicly" di panel Contacts detail prospect; guest lihat "Log in to search contacts". Diuji live: JOSEPH WEINSTEIN ELECTRIC (id 69681) menghasilkan Martin Weinstein/Owner + LinkedIn + phone 718-843-5555 dari allbiz/chamberofcommerce — sama dengan pencarian Google manual. DuckDuckGo `&rut=` tracking suffix harus dibuang sebelum mencocokkan sourceUrl (tidak jadi query param). Step C manual (Blue Book dll.) belum otomatis; Step D tetap dilarang di Free.
+
 
 ---
 

@@ -1,0 +1,7 @@
+---
+import lockup from '../../../logo-concepts/kliseer-lockup.svg?raw';
+interface Props { id: string; }
+const { id } = Astro.props;
+const svg = lockup.replace('id="title"', `id="${id}"`).replace('aria-labelledby="title"', `aria-labelledby="${id}"`);
+---
+<span class="logo-plaque" set:html={svg} />

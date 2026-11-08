@@ -35,6 +35,8 @@ jobs:
         run: npm run build
         env:
           DATABASE_URL: postgres://build:build@127.0.0.1:5432/build
+      - name: Validate landing static output
+        run: test -s landing/dist/index.html
 
   deploy:
     name: Deploy production
@@ -72,27 +74,59 @@ jobs:
           release="/opt/kliseer/releases/$1"
           current="/opt/kliseer/current"
           previous="$(readlink "$current" || true)"
+          previous_dir="$(readlink -f "$current" || true)"
           test -f /opt/kliseer/.env.local
           ln -sfn /opt/kliseer/.env.local "$release/.env.local"
           cd "$release"
           npm ci
           npm run db:init
           npm run build
+          test -s "$release/landing/dist/index.html"
+          if [ ! -L /etc/caddy/Caddyfile ] || [ "$(readlink /etc/caddy/Caddyfile)" != "$current/deploy/Caddyfile" ]; then
+            echo 'Caddy preflight failed: /etc/caddy/Caddyfile must symlink to /opt/kliseer/current/deploy/Caddyfile; see deploy/README.md' >&2
+            exit 1
+          fi
+          if [ ! -f /etc/caddy/Caddyfile.pre-kliseer ]; then
+            echo 'Caddy preflight failed: expected backup /etc/caddy/Caddyfile.pre-kliseer; see deploy/README.md' >&2
+            exit 1
+          fi
+          caddy validate --config "$release/deploy/Caddyfile" --adapter caddyfile
+          rollback() {
+            if [ -n "$previous" ]; then
+              ln -sfn "$previous" "$current"
+              sudo -n /usr/bin/systemctl restart kliseer.service || true
+              if [ -f "$previous_dir/deploy/Caddyfile" ]; then
+                caddy reload --config "$previous_dir/deploy/Caddyfile" --adapter caddyfile || true
+              else
+                caddy reload --config /etc/caddy/Caddyfile.pre-kliseer --adapter caddyfile || true
+              fi
+            fi
+          }
           ln -sfn "releases/$1" /opt/kliseer/current.next
           mv -Tf /opt/kliseer/current.next "$current"
           if ! sudo -n /usr/bin/systemctl restart kliseer.service; then
-            if [ -n "$previous" ]; then ln -sfn "$previous" /opt/kliseer/current; sudo -n /usr/bin/systemctl restart kliseer.service; fi
+            rollback
             exit 1
           fi
+          if ! caddy reload --config "$current/deploy/Caddyfile" --adapter caddyfile; then
+            rollback
+            exit 1
+          fi
+          domain=64-177-42-81.sslip.io
+          healthy=false
           for attempt in $(seq 1 20); do
-            status="$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3000/ || true)"
-            if [ "$status" = 200 ]; then echo 'release healthy (app auth active, home returns 200)'; exit 0; fi
+            app_status="$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3000/app || true)"
+            caddy_app_status="$(curl --silent --show-error --resolve "$domain:443:127.0.0.1" --output /dev/null --write-out '%{http_code}' "https://$domain/app" || true)"
+            if [ "$app_status" = 200 ] && [ "$caddy_app_status" = 200 ] && curl --silent --show-error --fail --resolve "$domain:443:127.0.0.1" "https://$domain/" | cmp -s - "$release/landing/dist/index.html"; then
+              healthy=true
+              break
+            fi
             sleep 2
           done
-          if [ -n "$previous" ]; then
-            ln -sfn "$previous" /opt/kliseer/current
-            sudo -n /usr/bin/systemctl restart kliseer.service
+          if [ "$healthy" != true ]; then
+            rollback
+            echo 'release health check failed (Caddy landing root or /app backend)' >&2
+            exit 1
           fi
-          echo 'release health check failed' >&2
-          exit 1
+          echo 'release healthy (Caddy landing root and /app backend)'
           REMOTE

@@ -25,6 +25,9 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
     if (!user) return Response.json({ error: AUTH_ERROR }, { status: 409 });
     const [account] = await sql<{ id: number }[]>`select id from sellers where user_id = ${user.id} limit 1`;
     await claimGuestRow(user.id, account?.id ?? null);
+    // No guest row to claim (direct signup without visiting data pages): create the seller row.
+    const [has] = await sql<{ id: number }[]>`select id from sellers where user_id = ${user.id} limit 1`;
+    if (!has) await sql`insert into sellers (user_id) values (${user.id})`;
     await createSession(user.id);
     return Response.json({ ok: true });
   }

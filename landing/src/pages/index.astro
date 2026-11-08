@@ -1,0 +1,117 @@
+---
+import Logo from '../components/Logo.astro';
+import Icon from '../components/Icon.astro';
+import WorkflowScene from '../components/WorkflowScene.astro';
+import desktopPreview from '../assets/hero-desktop.webp';
+import mobilePreview from '../assets/hero-mobile.webp';
+import favicon from '../../../logo-concepts/kliseer-icon.svg?url';
+import '../styles/landing.css';
+const steps = [
+  { kind: 'understand', title: 'Understand your business', copy: 'Bring your company information together. Klise helps turn documents and conversations into a profile you can review.', note: 'Your information. A clearer starting point.' },
+  { kind: 'target', title: 'Define your target', copy: 'Choose the regions, companies, and buyer roles that matter. Give your search a direction before exploring prospects.', note: 'Focus on fit, not a longer list.' },
+  { kind: 'prospects', title: 'Find your prospects', copy: 'Explore companies through dated public signals. See the rule-based score, understand the context, and open the supporting source.', note: 'A reason to look closer. Not a promise to buy.' },
+  { kind: 'move', title: 'Make your move', copy: 'Choose an available contact and prepare an outreach draft. Review the details, make it your own, and decide what happens next.', note: 'A considered introduction. Always in your hands.' },
+] as const;
+const factors = [{ name: 'Keyword', value: 5, reason: 'Recent signals match product keywords.' }, { name: 'Freshness', value: 5, reason: 'The latest saved signal is recent.' }, { name: 'Place', value: 5, reason: 'The location matches the seller’s region.' }, { name: 'Target fit', value: 1, reason: 'Company types were not set in this snapshot.' }];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111112" />
+    <title>Kliseer — Stop guessing. Start aiming.</title>
+    <meta name="description" content="Turn scattered business data into clear targets, relevant prospects, and focused outreach. Explore the Kliseer demo." />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+    <link rel="canonical" href={Astro.site} />
+    <meta property="og:title" content="Kliseer — Stop guessing. Start aiming." />
+    <meta property="og:description" content="Turn scattered business data into clear targets, relevant prospects, and focused outreach." />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <div class="intro" id="intro" hidden aria-label="Preparing the product preview">
+      <div class="intro-inner"><Logo id="intro-logo" /><span class="loading-mark" aria-hidden="true"><i></i><i></i><i></i></span><p role="status">Preparing the product preview…</p><button id="skip-intro" type="button">Continue without preview <Icon name="arrow" size={16} /></button></div>
+    </div>
+    <div id="site">
+      <a class="skip-link" href="#main">Skip to content</a>
+      <header class="site-header wrap">
+        <a href="/" aria-label="Kliseer home"><Logo id="nav-logo" /></a>
+        <nav class="desktop-nav" aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#inside-a-prospect">Inside a prospect</a><a href="#data-and-limitations">Data &amp; limitations</a></nav>
+        <a class="login-link" href="/app/login">Log in <Icon name="arrow" size={17} /></a>
+      </header>
+      <main id="main">
+        <section class="hero" aria-labelledby="hero-title" id="hero">
+          <div class="haze" aria-hidden="true"><canvas id="haze-canvas"></canvas><div class="film-grain"></div></div>
+          <div class="hero-copy wrap">
+            <h1 id="hero-title">Stop guessing.<br /><span>Start aiming.</span></h1>
+            <p>Turn scattered business data into clear targets,<br class="desktop-break" /> relevant prospects, and focused outreach.</p>
+            <div class="hero-actions"><a class="button button-primary" href="/app">Explore Demo <Icon name="arrow" /></a><a class="text-link" href="#how-it-works">See how it works <Icon name="chevron" size={16} /></a></div>
+          </div>
+          <figure class="hero-product wrap">
+            <picture>
+              <source media="(max-width: 600px)" srcset={mobilePreview.src} width="684" height="940" />
+              <img id="hero-preview" src={desktopPreview.src} width="1200" height="488" alt="Kliseer prospect detail for Hivolts Electrical Inc. Historical November 7, 2026 snapshot: overall 16 out of 20, Tier S, with four scoring factors and the supporting dated permit." loading="eager" decoding="async" fetchpriority="high" />
+            </picture>
+            <div class="preview-fallback" id="preview-fallback" hidden><strong>From company context to a considered next step.</strong><p>Understand your business. Define your target. Explore sourced prospects. Prepare a draft you review.</p><a href="/app">Explore the live app <Icon name="arrow" /></a></div>
+            <figcaption><span>Kliseer product demonstration</span><span>Historical sample · Nov 7, 2026 · not live results</span></figcaption>
+          </figure>
+          <script is:inline>
+            (() => {
+              const overlay = document.getElementById('intro');
+              const site = document.getElementById('site');
+              const image = document.getElementById('hero-preview');
+              const fallback = document.getElementById('preview-fallback');
+              const skip = document.getElementById('skip-intro');
+              let done = false;
+              const release = () => {
+                if (done) return;
+                done = true;
+                overlay.hidden = true;
+                site.inert = false;
+                document.documentElement.dataset.ready = 'true';
+                performance.mark('kliseer:hero-ready');
+                document.dispatchEvent(new Event('kliseer:ready'));
+                const motion = document.createElement('script');
+                motion.type = 'module';
+                motion.src = '/motion/main.js';
+                document.body.appendChild(motion);
+              };
+              const failed = () => { image.hidden = true; fallback.hidden = false; release(); };
+              try {
+                skip.addEventListener('click', () => { image.hidden = true; fallback.hidden = false; release(); document.querySelector('.button-primary').focus(); });
+                image.addEventListener('error', failed, { once: true });
+                if (image.complete) { if (image.naturalWidth) release(); else failed(); return; }
+                image.addEventListener('load', () => image.decode().then(release, failed), { once: true });
+                if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                  overlay.hidden = false;
+                  site.inert = true;
+                  performance.mark('kliseer:loader-open');
+                  skip.focus({ preventScroll: true });
+                }
+              } catch { release(); }
+            })();
+          </script>
+        </section>
+        <section class="workflow wrap" id="how-it-works" aria-labelledby="workflow-title">
+          <div class="section-intro"><h2 id="workflow-title">Less scattered.<br /><span>More deliberate.</span></h2><div><p>Four steps from understanding your business<br class="desktop-break" /> to choosing your next conversation.</p><button type="button" class="motion-toggle" data-motion-toggle hidden><Icon name="pause" size={15} /><span>Pause motion</span></button></div></div>
+          <nav class="workflow-path" aria-label="The four workflow stages">{steps.map((step, i) => <a href={`#${step.kind}`}><span>{i + 1}</span>{step.title}<Icon name="arrow" size={17} /></a>)}</nav>
+          {steps.map((step, i) => <section class:list={['workflow-step', { 'workflow-step--reverse': i % 2 === 1 }]} id={step.kind} aria-labelledby={`${step.kind}-title`}><div class="step-copy"><h3 id={`${step.kind}-title`}>{step.title}</h3><span class="step-position" aria-label={`Step ${i + 1} of 4`}>{String(i + 1).padStart(2, '0')} <span>/ 04</span></span><p>{step.copy}</p><p class="step-note">{step.note}</p></div><WorkflowScene kind={step.kind} title={step.title} /></section>)}
+        </section>
+        <section class="inside-section" id="inside-a-prospect" aria-labelledby="inside-title"><div class="wrap">
+          <div class="section-intro"><h2 id="inside-title">Look past the name.<br /><span>See the reason.</span></h2><p>A prospect is more than a contact.<br class="desktop-break" /> Understand the fit, then check the evidence.</p></div>
+          <div class="prospect-detail">
+            <div class="prospect-identity"><div><h3>Hivolts Electrical Inc</h3><p>Brooklyn, NY · Electrical contractor</p></div><div class="score-summary"><strong>16 <span>/ 20</span></strong><span class="tier">Tier S</span></div></div>
+            <div class="evidence-grid"><div class="factor-list">{factors.map(f => <div class="factor"><div><strong>{f.name}</strong><p>{f.reason}</p></div><span class="stars" role="img" aria-label={`${f.value} of 5 stars`}>{Array.from({length:5},(_,i)=><span class:list={{filled:i<f.value}}><Icon name="star" size={19} /></span>)}</span></div>)}</div><div class="source-excerpt"><span class="field-label">Supporting signal</span><h4>Temporary power and generator connections for a construction hoist.</h4><p>NYC DOB electrical permit<br />Nov 1, 2026 · B01483138-I1-EL</p><a href="https://data.cityofnewyork.us/resource/dm9a-ab7w.json?job_filing_number=B01483138-I1-EL" target="_blank" rel="noopener noreferrer">Open the source record <Icon name="external" size={16} /><span class="sr-only"> (opens in a new tab)</span></a></div></div>
+            <p class="snapshot-note">Historical score snapshot: Nov 7, 2026. Rules calculate the score; AI can explain the context. Neither is a guarantee of buying intent.</p>
+          </div>
+        </div></section>
+        <section class="limitations wrap" id="data-and-limitations" aria-labelledby="limits-title">
+          <h2 id="limits-title">Useful signals.<br /><span>Clear limitations.</span></h2>
+          <div class="limits-list"><div><h3>Public records, with a source.</h3><p>Connected permit sources cover New York City, Austin, and Seattle—not every company or project in the US. A dated record is evidence to inspect, not a claim that a project is still active.</p></div><div><h3>Contacts are not always available.</h3><p>Missing details stay missing. Company-published, directory, and provider-supplied records have different provenance. An available email is not a deliverability guarantee.</p></div><div><h3>Your judgment stays in the loop.</h3><p>Match scores indicate relevance, not purchase intent. Outreach remains a draft for human review. Kliseer does not automatically send email.</p></div></div>
+        </section>
+        <section class="final-cta" aria-labelledby="final-title"><div class="wrap"><h2 id="final-title">A clearer place<br />to start.</h2><p>Bring your business into focus.<br />See where the next conversation could begin.</p><div class="final-actions"><a class="button button-primary" href="/app">Explore Demo <Icon name="arrow" /></a><a class="text-link" href="/app/create-account">Create account <Icon name="chevron" size={16} /></a></div></div></section>
+      </main>
+      <footer class="site-footer wrap"><a href="/" aria-label="Kliseer home"><Logo id="footer-logo" /></a><p>Understand your business. Find your direction.</p><a href="#data-and-limitations">Data &amp; limitations</a></footer>
+    </div>
+  </body>
+</html>

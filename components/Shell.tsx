@@ -42,7 +42,7 @@ export async function Shell({ tab, sellerId, chat, setupStep, children }: Props)
         <div className="sidebar-header">
           <Link href="/" className="brand" aria-label="Kliseer home">
             <BrandLockup size={32} />
-            <Image className="sidebar-brand-icon" src="/brand/kliseer-icon.svg" alt="" width={28} height={28} />
+            <Image className="sidebar-brand-icon" src="/app/brand/kliseer-icon.svg" alt="" width={28} height={28} />
           </Link>
           <SidebarToggle />
         </div>

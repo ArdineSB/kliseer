@@ -30,7 +30,7 @@ export function ContactForm({ company, onDone }: { company?: Company; onDone: ()
     setQuery(q);
     setPicked(null);
     if (q.trim().length < 2) return setOptions([]);
-    const res = await fetch(`/api/contacts?company=${encodeURIComponent(q)}`).catch(() => null);
+    const res = await fetch(`/app/api/contacts?company=${encodeURIComponent(q)}`).catch(() => null);
     setOptions(res?.ok ? await res.json() : []);
   }
 
@@ -39,7 +39,7 @@ export function ContactForm({ company, onDone }: { company?: Company; onDone: ()
     setBusy(true);
     setError(null);
     const data = Object.fromEntries(new FormData(form));
-    const res = await fetch('/api/contacts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...data, companyId: picked.id }) }).catch(() => null);
+    const res = await fetch('/app/api/contacts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...data, companyId: picked.id }) }).catch(() => null);
     setBusy(false);
     if (!res?.ok) return setError((await res?.json().catch(() => null))?.error ?? 'Could not save the contact. Try again.');
     form.reset();

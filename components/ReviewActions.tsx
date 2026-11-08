@@ -9,7 +9,7 @@ export function ApproveButton({ section, label }: { section: Section; label: str
   const [state, setState] = useState<'idle' | 'saving' | 'error'>('idle');
   async function approve() {
     setState('saving');
-    const res = await fetch('/api/seller', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ section, data: {}, approve: true }) }).catch(() => null);
+    const res = await fetch('/app/api/seller', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ section, data: {}, approve: true }) }).catch(() => null);
     if (!res?.ok) return setState('error');
     setState('idle');
     router.refresh();

@@ -52,7 +52,7 @@ export default async function SeerPage({ searchParams }: PageProps<'/seer'>) {
           <div><span>New this week</span><b className="num">{r.summary.new.toLocaleString('en-US')}</b></div>
         </div>
 
-        <form className="toolbar" action="/seer" role="search">
+        <form className="toolbar" action="/app/seer" role="search">
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <div className="search">
               <Icon name="search" />

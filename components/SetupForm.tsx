@@ -43,7 +43,7 @@ export function SetupForm({ section, seller, crumbs, chatHref, next, back, head 
     const changed = Object.fromEntries(Object.entries(data).filter(([k, v]) => JSON.stringify(v) !== JSON.stringify(seller[section][k] ?? (Array.isArray(v) ? [] : ''))));
     try {
       if (Object.keys(changed).length) {
-        const res = await fetch('/api/seller', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ section, data: changed }) });
+        const res = await fetch('/app/api/seller', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ section, data: changed }) });
         if (!res.ok) throw new Error((await res.json().catch(() => null))?.error ?? 'Could not save. Check your connection and try again.');
       }
       setDirty(false);

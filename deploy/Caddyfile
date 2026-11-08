@@ -1,0 +1,12 @@
+64-177-42-81.sslip.io {
+@app path /app /app/*
+  handle @app {
+	reverse_proxy 127.0.0.1:3000
+  }
+
+	handle {
+		root * /opt/kliseer/current/landing/dist
+		try_files {path} {path}/index.html
+		file_server
+	}
+}

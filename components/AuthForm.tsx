@@ -42,7 +42,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
     if (mode === 'signup' && password.length < 8) return setError('Password must be at least 8 characters.');
     setState('submitting');
     try {
-      const res = await fetch(`/api/auth/${mode}`, {
+      const res = await fetch(`/app/api/auth/${mode}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
