@@ -21,7 +21,7 @@ export function SidebarToggle() {
       aria-expanded={!collapsed}
       title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
     >
-      <Icon name="sidebar" size={18} />
+      <Icon name="sidebar" />
     </button>
   );
 }

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { thread, type Tab } from '@/lib/chat';
@@ -38,7 +39,10 @@ export async function Shell({ tab, sellerId, chat, setupStep, children }: Props)
     <div className={`shell${chat ? '' : ' shell--home'}`}>
       <aside className="sidebar">
         <div className="sidebar-header">
-          <Link href="/" className="brand" aria-label="Kliseer home"><BrandLockup size={28} /></Link>
+          <Link href="/" className="brand" aria-label="Kliseer home">
+            <BrandLockup size={32} />
+            <Image className="sidebar-brand-icon" src="/brand/kliseer-icon.svg" alt="" width={28} height={28} />
+          </Link>
           <SidebarToggle />
         </div>
         <nav className="nav" aria-label="Main">
