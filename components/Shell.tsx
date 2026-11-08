@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { thread, type Tab } from '@/lib/chat';
 import { ensureSellerId, getViewer } from '@/lib/session';
+import { BrandLockup } from './BrandLockup';
 import { ChatPanel } from './ChatPanel';
 import { Icon, type IconName } from './Icon';
 import { LogoutButton } from './LogoutButton';
@@ -36,7 +37,7 @@ export async function Shell({ tab, sellerId, chat, setupStep, children }: Props)
   return (
     <div className="shell" style={chat ? undefined : { gridTemplateColumns: '212px minmax(0, 1fr)' }}>
       <aside className="sidebar">
-        <Link href="/" className="brand"><span className="brand-mark" aria-hidden="true">K</span>Kliseer</Link>
+        <Link href="/" className="brand" aria-label="Kliseer home"><BrandLockup size={28} /></Link>
         <nav className="nav" aria-label="Main">
           {NAV.map((n, i) => (
             <div key={n.tab}>

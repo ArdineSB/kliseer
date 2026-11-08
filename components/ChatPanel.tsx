@@ -12,9 +12,11 @@ type Props = {
   initial: ChatMessage[];
   /** Home: shown instead of the message list while the thread is empty. */
   hero?: ReactNode;
+  /** Home: suggested prompt chip under the hero (frame 5013). Fills the composer. */
+  suggestedPrompt?: string;
 };
 
-export function ChatPanel({ tab, title, placeholder, initial, hero }: Props) {
+export function ChatPanel({ tab, title, placeholder, initial, hero, suggestedPrompt }: Props) {
   const router = useRouter();
   const [messages, setMessages] = useState(initial);
   const [text, setText] = useState('');
@@ -63,6 +65,29 @@ export function ChatPanel({ tab, title, placeholder, initial, hero }: Props) {
       <button className="send" type="submit" disabled={sending || !text.trim()} aria-label="Send"><Icon name="arrowUp" /></button>
     </form>
   );
+  // Home composer per frame 5013: 844px, radius 24, context chip, Send pill, disclaimer below.
+  const homeComposer = (
+    <div className="home-composer">
+      <form className="composer composer-lg" onSubmit={(e) => { e.preventDefault(); send(text); }}>
+        <span className="context-chip"><Icon name="userCheck" size={14} /> All workspaces</span>
+        <label htmlFor={`chat-${tab}`} className="sr-only">{placeholder}</label>
+        <textarea
+          id={`chat-${tab}`}
+          value={text}
+          placeholder={placeholder}
+          maxLength={4000}
+          rows={1}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(text); } }}
+        />
+        <button className="send-pill" type="submit" disabled={sending || !text.trim()}>Send</button>
+      </form>
+      <p className="chat-disclaimer">AI can make mistakes. Review drafts and check sources before using them.</p>
+    </div>
+  );
+  const prompt = suggestedPrompt && !text && (
+    <button type="button" className="hero-prompt" onClick={() => setText(suggestedPrompt)}>{suggestedPrompt}</button>
+  );
   const error = failed && (
     <div className="chat-error" role="alert">
       Klise is unavailable right now. Your message is saved.
@@ -83,7 +108,9 @@ export function ChatPanel({ tab, title, placeholder, initial, hero }: Props) {
   if (hero) {
     return (
       <div className="home-main">
-        {messages.length === 0 && !sending ? <div className="home-hero">{hero}{composer}{error}</div> : <>{list}{error}{composer}</>}
+        {messages.length === 0 && !sending
+          ? <div className="home-hero">{hero}{prompt}{homeComposer}{error}</div>
+          : <>{list}{error}{homeComposer}</>}
       </div>
     );
   }
