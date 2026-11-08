@@ -158,14 +158,16 @@ Field dari brief: `Company name`, `Website`, `Products and services`, `Customer 
 
 Tampilkan form yang bisa diedit berdampingan dengan chat. Siapkan contoh kosong, terisi draft, dan tersimpan. Aksi lanjut: `Continue to ICP`. Aturan field wajib dan validasi bisnis belum final; jangan menetapkan semua field sebagai wajib hanya karena tercantum di layout.
 
-**Upload — frame 5, dirancang 7 November 2026, menunggu review:** panel upload ditambahkan ke `setup/company/empty` (id `2238`) tanpa mengganti stepper. Tiga frame turunan di baris canvas y=6000: `klise/upload/parsing` (`6456`), `klise/upload/draft` (`6598`), dan `klise/upload/error` (`6740`). Keempat state memakai shell Klise yang sama. State form lama lainnya tetap tersedia.
+**Upload — frame5 multi-file disetujui user 7 November 2026:** keempat frame lama dipakai di tempat: `setup/company/empty`2238, `klise/upload/parsing`6456, `klise/upload/draft`6598, `klise/upload/error`6740. Tidak menambah Screens atau mengubah sidebar, logo, chat shell, dan stepper. Referensi tersimpan di `reference/upload-multiple-files.png`. Warna terang Kliseer dipertahankan; bukan menyalin tema gelap Tryclean.
 
-- Kosong: `Upload file`, PDF/MD/TXT, batas 2 MB dari `lib/upload.ts`; tombol `Load Harborline study case` hanya di state Company kosong.
-- Parsing: status membaca file tanpa persentase rekaan, `Cancel`, form diredupkan dan aksi lanjut nonaktif. Stepper tidak berubah.
-- Draft: contoh ilustratif seller fiktif Harborline, bukan hasil parsing nyata. Empat field Company terisi (name, products, customer segments, region), masing-masing dengan label `Draft · From file` dan kutipan inline. Website, existing customers, dan price range tidak diisi karena contoh file tidak memuatnya. Tidak ada approval otomatis. Contoh ini memperlihatkan hasil Company; file lain dapat menghasilkan draft ICP/Target sesuai Q3.
-- Error: teks persis `Could not read that file.`, petunjuk format/ukuran, dan `Choose file`. Form tetap tersedia untuk pengisian manual.
-- Semua state menjelaskan file tidak disimpan; hanya nilai hasil ekstraksi dan kutipan yang disimpan. Nama file dan kutipan di frame adalah konten ilustratif, bukan bukti upload runtime.
-- Wiring prototipe: Upload/Choose/Replace → parsing → draft setelah 2.2 detik (simulasi saja); Cancel → kosong; Load Harborline → draft; Continue to ICP dari draft → ICP kosong. Error dapat direview langsung di canvas. Render keempat state 1440 × 900 diperiksa via MCP; belum diuji dengan file picker/presenter dan belum ada perubahan frontend.
+- Tombol **Upload files**, area drag-and-drop, dan tabel808 px dengan kolom Name / Status / Size / Action. Bisa memilih beberapa file sekaligus; contoh3 file bukan batas jumlah file. PDF/MD/TXT, **2 MB per file** (2 MiB dari kontrak upload lama). Tidak menambah DOCX, meter storage1GB, tanggal uploaded, atau penyimpanan file asli. Jumlah maksimum/total batch belum ditetapkan; UI tidak menjanjikan unlimited.
+- Component set `klise/upload-files`10611 memiliki5 varian: Empty10486, Parsing10495, Ready10525, PartialError10555, TwoReady10586. Empat screen memakai instance. Empty memiliki dropzone besar dan study-case action hanya di Company kosong. Tombol Upload files tetap tersedia setelah batch selesai; memilih file/drop di prototipe membuka contoh batch, bukan file picker nyata.
+- Parsing: dua file Ready, satu Reading…, tanpa persentase rekaan. Hasil dari dua file siap tetap ada, diredupkan selama membaca; Continue nonaktif. Ready berarti file selesai dibaca, bukan approved. Panel Parsing dan footer memakai plural files. Delay2.2 detik ke draft masih simulasi.
+- Draft: contoh seller fiktif Harborline berlabel ilustratif,3 file menghasilkan4 field Company. **F1 company-overview.md**4KB → Company name dan Region; **F2 product-catalog.pdf**88KB → Products and services; **F3 sales-notes.txt**2KB → Customer segments. Setiap nilai memiliki kutipan literal dan label nama file/F-ID. Website, existing customers, price range tetap kosong. Tidak ada auto-approve. Teks fixture sumber disimpan pada pluginData komponen untuk memeriksa kutipan; bukan dokumen yang benar-benar diupload.
+- PartialError menggantikan error global lama: F1/F2 Ready, F3 Error dengan teks persis **Could not read that file.**. Choose again hanya untuk file gagal; Remove mengganti panel menjadi TwoReady. Tiga field dari F1/F2 dipertahankan, Customer segments tanpa nilai/kutipan karena F3 gagal. Menghapus file gagal tidak menghapus atau menyetujui draft lain. Prototipe belum menentukan aturan konflik antarfile atau menimpa edit manual.
+- Retention tetap: file asli tidak disimpan. Yang disimpan nanti nilai ekstraksi dan kutipan beserta atribusi file. Panel bukan perpustakaan dokumen persisten. View quotes → field, label sumber → row file terkait. Viewport content vertical-scroll dengan inner document, footer Continue tetap di luar scroll; panel tabel dan draft tidak harus muat seluruhnya pada viewport awal.
+- Verifikasi: render4 screen, partial failure, failed-file-removed, draft bagian bawah, dan field lengkap diperiksa. Smoke instance PartialError → TwoReady membuktikan jumlah row3→2 dan seluruh teks draft sukses tetap identik; dikembalikan PartialError. Empat kutipan cocok literal dengan fixture F1/F2/F3. Tiga row per status3-file diperiksa: Ready/Ready/Reading, Ready×3, Ready/Ready/Error. Scroll bottom diekspor memakai offset visual sementara lalu y28 dipulihkan. Belum menguji klik presenter, drag/drop, multi-file picker, parser, atau persistence runtime; tidak ada perubahan kode aplikasi.
+- **Kontrak development dari desain approved:** picker harus menerima multiple files dan dropzone menerima beberapa file, bukan memproses file pertama saja. Validasi2MiB dan status/error berlaku per file; kegagalan satu file tidak membatalkan batch sukses. Retry/removal file gagal tidak menghapus draft lain. Simpan filename bersama setiap kutipan literal; hasil tetap draft dan original tidak dipersist. Helper `readUpload`/`proposeCitations` adalah operasi per file yang perlu diorkestrasi, bukan bukti multi-file UI sudah diimplementasikan. Uji acceptance dengan minimal2 file sukses +1 gagal, lalu retry/remove sambil memastikan hasil sukses dan edit user tidak hilang. Aturan konflik antarfile dan batas total batch harus ditetapkan eksplisit saat implementasi, bukan ditebak dari contoh3 file.
 
 
 ### ICP
@@ -202,6 +204,8 @@ Verifikasi: render kelima state desktop 1440 × 900 diperiksa; baris 15–20 dip
 
 **Frame 7–9 — direvisi di tempat, bukan frame baru:** `seer/detail/ready` id `2097` sekarang WCK ELECTRIC CORP.; Hivolts `4701` dan A&S `8819` tetap ada. Shell, posisi frame, sidebar/logo, dan Seer chat dipertahankan. Jumlah Screens tetap 34. Loading/error yang menuju ready diperbarui ke WCK. Detail tetap scroll dalam workspace, bukan halaman email baru.
 
+**Disetujui user 7 November 2026:** revisi frame 7–9 ini, termasuk empat rating bintang G8 + overall tier, contoh WCK 16/S (5/5/5/1), kontak terbatas pada 13 baris seed, dan state draft/contact-required. Approval ini untuk desain, bukan klaim implementasi frontend/backend atau approval perubahan frame 6.
+
 Urutan: Back to prospects → nama/domain → navigasi bagian → **Analysis → Company profile → Contacts → Email draft → Sources**. Sources selalu bagian terakhir. Tombol navigasi dan citation IDs memiliki aksi scrollTo; source rows eksternal memiliki URL, sementara C5 research snapshot secara jujur menunjuk catatan internal, bukan URL verifikasi palsu.
 
 **Analysis / frame 8 — G8 menggantikan spesifikasi tiga baris sebelumnya:** empat baris **Keyword, Freshness, Place, Target fit**, masing-masing lima ikon star vektor dengan bagian kosong berupa outline, angka `n / 5`, dan alasan singkat. Header memuat `Overall 16 / 20` + badge `Tier S`. Kartu 808 × 418 px; paragraf interpretasi dipisahkan dari rating, dengan catatan bahwa AI tidak menghitung skor. Snapshot read-only DB 7 Nov memverifikasi WCK (id `69623`), Hivolts (`69825`), dan A&S (`69767`) semuanya k=5/f=5/p=5/t=1, total 16, S. Target fit 1 karena seller target.companyTypes kosong; jangan menebak jenis perusahaan. WCK punya lima keyword-matching signals dalam 90 hari; filing terbaru Nov 5. Overall bukan bukti buying intent. A&S tetap diberi caveat permit Complete.
@@ -210,12 +214,39 @@ Urutan: Back to prospects → nama/domain → navigasi bagian → **Analysis →
 
 **Contacts / frame 7:** hanya kontak dari 13 baris `scripts/seed-hunter-contacts.ts`, dicatat juga di `docs/sources.md` C6. WCK tidak punya seed row dan query kontak DB kosong: tampil no-contact, Phone: not found + link permit, ikon LinkedIn/web/social dicoret tanpa URL. Hivolts memakai Moishy Rosman dan company contact Hivolts Electrical; A&S memakai company contact A & S Electric Inc., bukan Francis. Komponen draft Solas hanya memakai Conor dengan `office@solasnyc.com`. Isaac, Francis, Yosef, dan `conor@` tidak dipakai sebagai kontak desain ini. Domain jobs@hivoltelectrical.com tetap mengikuti seed, tanpa koreksi diam-diam. Label Hunter tidak dinaikkan menjadi website-confirmed.
 
+**Revisi kartu kontak (8 Nov):** komponen `seer/contact-card` (id `11055`, halaman Components) mengikuti referensi user: header avatar inisial + nama + menu, lalu baris Company → Job title → Email (jabatan di atas email; nomor telepon tidak lagi berupa baris teks), ikon LinkedIn/web/social, footer tombol Phone dan Email. Ikon tanpa URL tetap dicoret (Q17). Hivolts menampilkan dua kartu (Moishy Rosman, Hivolts Electrical), A&S satu kartu company contact; WCK tetap no-contact. Glyph social diganti ikon share-nodes karena glyph lama rusak. Ikon Source di `seer/prospect-row` diganti panah external-link yang utuh.
+
+**LinkedIn, web, social (8 Nov):** component set `contact-link/linkedin`, `contact-link/web`, `contact-link/social`, masing-masing variant `State=Available` / `State=Unavailable`. LinkedIn Available = logo "in" biru (variable `brand/linkedin` `#0A66C2`), bisa diklik ke URL LinkedIn; Unavailable = logo outline abu + garis coret, latar subtle, tanpa interaksi. Web/social Available = glyph ungu; Unavailable = glyph abu + coret. Moishy: LinkedIn Available (URL profil yang dipakai `Open LinkedIn →`). Web Available untuk Hivolts (`hivoltselectrical.com`) dan A&S (`aselectricnyc.com`) sesuai kolom `site` seed. Social Unavailable untuk semua karena seed tidak punya URL social. WCK: ketiganya Unavailable. Frame `seer/detail/{loading,error,hivolts}` dipindah ke baris y=7000 karena sebelumnya menumpuk di atas `seer/table/{loading,empty,filtered-empty}`.
+
 State `seer/contact-availability/phone-missing` (`9597`) tetap tersedia. WCK juga memakai state itu secara nyata di detail: Phone: not found + URL permit, tanpa klaim bahwa pencarian eksternal sudah dijalankan. Hivolts/A&S mempertahankan nomor first-party yang diketahui. Form manual LinkedIn empty/filled tetap memakai Moishy dari seed. Lookup: login wajib, Free maksimum 5/bulan, tanpa scraping/extension atau runtime Hunter/SerpAPI Free. Ini desain, bukan API lookup yang sudah tersambung.
 
 **Email draft / frame 9:** 11 varian reusable lama tetap dipakai (Solas/Hivolts/A&S Empty, Generating, Saved; Hivolts NameChanged; Solas Guest), bukan menggambar layar baru. Hivolts Saved ↔ NameChanged sekarang **Moishy Rosman ↔ Hivolts Electrical** (jobs@hivoltelectrical.com); subject dan salam berubah nama saja, edit `We can work around your delivery schedule.` tetap. A&S memakai company contact/email seed, tanpa individual DM. Panel WCK id `9240` adalah override contact-required pada instance lama: tidak punya recipient, Generate disabled tanpa interaction; tidak meminjam kontak Solas. Hivolts/A&S default Empty. Generating delay tetap simulasi 1.8 detik. Input, clipboard, Save changes, auth, dan sending belum runtime.
 
 **Verifikasi revisi G8:** render detail, empat star rows, profile, contacts, Sources dan draft diperiksa; clearance paragraf/footnote disesuaikan agar tidak bertumpuk. Smoke struktur: empat faktor × lima slot star per detail, filled 5/5/5/1, total16/S, 15 profile fields, Sources terakhir. Query read-only berhasil membaca scores, sumber WCK, count464/matched5, dan kontak WCK kosong; tidak menjalankan refresh/seed. Instance Hivolts Saved → NameChanged dibuktikan mengganti nama saja pada subject/body; delivery edit utuh, kemudian dipulihkan Empty. WCK Generate tidak punya interaction. Pencarian teks UI seluruh halaman tidak menemukan Yosef/Francis/Isaac/conor@. Belum menguji klik presenter, input, atau layanan frontend/backend.
 
+
+### Landing / frame 1 — brief dan arah motion
+
+Brief, copy English, alur empat tahap, referensi visual, dan choreography motion dipusatkan di **[design_landing.md](design_landing.md)**. Gunakan dokumen tersebut untuk pekerjaan landing; `DESIGN.md` tetap acuan token/brand dan desain aplikasi internal.
+
+Status: brief tersedia, belum digambar di FigCraft atau diimplementasikan. CTA utama Explore Demo; headline kerja “Stop guessing. Start aiming.” Video ditunda. Jika landing menampilkan upload, pakai versi multi-file yang sudah approved (G13), bukan single-file lama. Keputusan produk tetap di `docs/decisions.md` G8–G13.
+
+### Authentication / frame 2–3
+
+**Dirancang via FigCraft MCP 7 November 2026, menunggu review user.** Landing diskip sesuai permintaan terbaru. Mode Operate: dua layar standalone, tanpa sidebar/chat atau panel marketing. Desktop 1440 × 900 memakai shell netral dan canvas putih radius12, form400 px terpusat horizontal, Inter, semantic tokens Kliseer, serta instance logo resmi `brand/lockup` yang diskalakan proporsional1.4×; tidak menggambar ulang wordmark.
+
+Komponen `auth/form` id `10109` memiliki 10 varian Screen × State. Field dan tombol memakai instance `field/text` dan `button` yang sudah ada; indikator From chat disembunyikan khusus pada auth, tidak mengubah master setup. Auto-layout menggeser konten saat error muncul; field error, submitting/disabled, dan focus email ditampilkan.
+
+| Screen | Frame utama | State desktop |
+|---|---|---|
+| Login | `auth/login/empty` (`10110`) | empty, filled (`10148`), submitting (`10186`), error (`10224`) |
+| Create account | `auth/create-account/empty` (`10264`) | empty, filled (`10300`), invalid-email (`10336`), short-password (`10373`), error (`10410`), submitting (`10448`) |
+
+**Login:** Email, Password, Log in, Explore Demo, link Create account. **Create account:** Email, Password, Create account, link Log in; tidak ada nama, Explore Demo, social auth, atau verifikasi email. Tombol utama disabled saat form kosong/submitting. Error generik kedua layar persis `Email or password is not valid.`; pada signup juga mewakili email sudah terdaftar. Validasi signup persis `Enter a valid email.` dan `Password must be at least 8 characters.`. Nilai email contoh `sales@example.com`, bukan credential akun nyata; password hanya mask.
+
+**Prototype:** link Login ↔ Create account tersambung. Klik field pada review state memakai sample-state transition ke Filled (bukan input teks runtime). Filled dan retry generik menuju Submitting; delay1 detik menuju Home `5013`, dengan aksi session-label Log out. Explore Demo hanya pada Login menuju Home dengan label Log in. Enam flow starting points memudahkan review default/error/validation. Frame error dapat dibuka lewat flow review; prototipe tidak menghitung validasi atau memeriksa akun. Tidak mengimplementasikan session cookie, klaim guest, auth API, atau perubahan Basic Auth. Aturan G2 tetap kontrak implementasi.
+
+**Verifikasi:** render desktop default, filled/focus, submitting, error generik, dan kedua validasi diperiksa; footer Login yang sempat wrap diperbaiki. Smoke struktur atas10 frame memastikan dua field, tidak ada Demo pada signup, copy error tepat, indikator chat tidak terlihat, footer satu baris, Empty submit tanpa interaction, dan Submitting menuju Home. Instance Login dicoba Filled → Error → Empty untuk membuktikan varian/error dan pemulihan state default. Belum diuji dengan klik presenter atau autentikasi/input browser nyata. Export `auth-login-*.png`, `auth-create-account-*.png`, dan `auth-form-states.png` tersedia di `design/export/`.
 
 ### Layar pendukung
 
@@ -387,10 +418,12 @@ Target review desain, belum klaim hasil pengujian:
 
 ## 10. Status file FigCraft dan handoff
 
-File `design/kliseer.figcraft` dibangun ulang pada 4 November dan diperbarui melalui MCP. Setelah penambahan A&S pada frame 7–9, Screens berisi 34 frame desktop; Components memuat logo, setup, row Seer, state draft, serta contact manual/availability. Semua perubahan detail masih menunggu review user.
+File `design/kliseer.figcraft` dibangun ulang pada 4 November dan diperbarui melalui MCP. Screens tetap44 frame desktop; Components29 root termasuk `auth/form` dan `klise/upload-files`. Detail7–9 dan revisi multi-file upload5 approved; auth2–3 menunggu review. Landing baru brief, belum digambar.
 
 | Kelompok | Frame | Keterangan |
 |---|---|---|
+| Authentication | `auth/login/{empty,filled,submitting,error}` | Email/password, Log in, Explore Demo, link Create account; menunggu review |
+| Authentication | `auth/create-account/{empty,filled,invalid-email,short-password,error,submitting}` | Tanpa nama/Demo; validasi dan error generik sesuai G4; menunggu review |
 | Setup | `setup/company/{empty,draft,loading,error,saved}` | Tab aktif Klise; error = Website tidak valid |
 | Upload Klise | `setup/company/empty`, `klise/upload/{parsing,draft,error}` | Panel upload dan study case pada empty; draft dengan kutipan; error baca file terpisah dari error Website |
 | Setup | `setup/icp/{empty,draft,loading,error,saved}` | Error = Company size bukan rentang |
@@ -458,7 +491,7 @@ Sebagian besar selisih di atas sudah diterapkan pada file yang dibuat ulang: ung
 Paket handoff:
 
 1. File `.figcraft` yang disimpan setelah review: `design/kliseer.figcraft`.
-2. Export PNG: `design/export/` mencakup 34 frame Screens, Q20, profile/Analysis/Contacts/Sources WCK/Hivolts/A&S, 11 varian email yang memakai seed sah, WCK contact-required, dan manual/phone states. Capture Solas section lama yang digantikan WCK dihapus agar tidak menjadi acuan stale. Atlas `components.png` 2000 px lebar; detail vektor tetap di FigCraft. Token CSS: `design/tokens.css`.
+2. Export PNG: `design/export/` mencakup44 frame Screens, Q20, detail WCK/Hivolts/A&S, varian email/contact, dan10 state auth. Empat export upload lama diperbarui ke multi-file; tambahan `klise-upload-draft-bottom.png`, `klise-upload-draft-fields.png`, `klise-upload-partial-draft-fields.png`, `klise-upload-failed-file-removed.png`, `klise-upload-file-states.png`. Atlas komponen2000 px lebar; vektor asli di FigCraft, token di `design/tokens.css`.
 3. Daftar token final, ukuran komponen, dan contoh state.
 4. Peta interaksi: stepper, edit dari Review, Find prospects, detail, dan kembali ke tabel.
 5. Catatan konten/data yang masih contoh atau belum diputuskan.

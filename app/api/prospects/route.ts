@@ -1,4 +1,5 @@
 import { listProspects } from '@/lib/prospects';
+import { ensureSellerId } from '@/lib/session';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -12,5 +13,5 @@ export async function GET(req: Request) {
   const q = p.get('q') ?? undefined;
   if (q && q.length > 100) return Response.json({ error: 'q too long' }, { status: 400 });
   const page = Number(p.get('page') ?? 1);
-  return Response.json(await listProspects({ q, tier, source: p.get('source') ?? undefined, page: Number.isInteger(page) && page > 0 ? page : 1 }));
+  return Response.json(await listProspects(await ensureSellerId(), { q, tier, source: p.get('source') ?? undefined, page: Number.isInteger(page) && page > 0 ? page : 1 }));
 }

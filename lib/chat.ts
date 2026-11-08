@@ -1,4 +1,4 @@
-import { sql, SELLER_ID } from './db';
+import { sql } from './db';
 import { llm, LLM_MODEL } from './llm';
 import { cleanFields, FIELDS, type FieldValue, type Section } from './fields';
 import { getSeller, saveSection } from './seller';
@@ -10,18 +10,18 @@ export type ChatMessage = { id: number; tab: Tab; role: 'user' | 'assistant'; co
 /** Setup tabs that write drafts into a seller section (D-19). */
 const SECTION_OF: Partial<Record<Tab, Section>> = { klise: 'company', icp: 'icp', target: 'target' };
 
-export async function thread(tab: Tab, limit = 50) {
+export async function thread(sellerId: number, tab: Tab, limit = 50) {
   const rows = await sql<ChatMessage[]>`
     select id, tab, role, content, created_at from chat_messages
-    where seller_id = ${SELLER_ID} and tab = ${tab} order by id desc limit ${limit}`;
+    where seller_id = ${sellerId} and tab = ${tab} order by id desc limit ${limit}`;
   return rows.reverse();
 }
 
 /** Latest message per tab, for Home history. */
-export async function threadHeads() {
+export async function threadHeads(sellerId: number) {
   return sql<ChatMessage[]>`
     select distinct on (tab) id, tab, role, content, created_at from chat_messages
-    where seller_id = ${SELLER_ID} order by tab, id desc`;
+    where seller_id = ${sellerId} order by tab, id desc`;
 }
 
 function systemPrompt(tab: Tab, section: Section | undefined, current: Record<string, FieldValue> | undefined) {
@@ -55,17 +55,17 @@ export class LlmUnavailable extends Error {}
  * Store the user message first (kept even if the LLM fails), call the LLM, store the reply,
  * and write valid drafts into the seller section with status draft and a "From chat" source.
  */
-export async function sendMessage(tab: Tab, message: string) {
+export async function sendMessage(sellerId: number, tab: Tab, message: string) {
   // Retry after an LLM failure resends the same text; reuse the stored message instead of duplicating it.
   const [last] = await sql<ChatMessage[]>`
     select id, tab, role, content, created_at from chat_messages
-    where seller_id = ${SELLER_ID} and tab = ${tab} order by id desc limit 1`;
+    where seller_id = ${sellerId} and tab = ${tab} order by id desc limit 1`;
   const userMsg = last?.role === 'user' && last.content === message ? last : (await sql<ChatMessage[]>`
-    insert into chat_messages (seller_id, tab, role, content) values (${SELLER_ID}, ${tab}, 'user', ${message})
+    insert into chat_messages (seller_id, tab, role, content) values (${sellerId}, ${tab}, 'user', ${message})
     returning id, tab, role, content, created_at`)[0];
   const section = SECTION_OF[tab];
-  const seller = section ? await getSeller() : undefined;
-  const history = (await thread(tab, 20)).filter((m) => m.id !== userMsg.id);
+  const seller = section ? await getSeller(sellerId) : undefined;
+  const history = (await thread(sellerId, tab, 20)).filter((m) => m.id !== userMsg.id);
 
   let content: string;
   try {
@@ -87,7 +87,7 @@ export async function sendMessage(tab: Tab, message: string) {
 
   const { reply, drafts } = parseReply(content);
   const [assistantMsg] = await sql<ChatMessage[]>`
-    insert into chat_messages (seller_id, tab, role, content) values (${SELLER_ID}, ${tab}, 'assistant', ${reply})
+    insert into chat_messages (seller_id, tab, role, content) values (${sellerId}, ${tab}, 'assistant', ${reply})
     returning id, tab, role, content, created_at`;
 
   let applied: Record<string, FieldValue> = {};
@@ -96,7 +96,7 @@ export async function sendMessage(tab: Tab, message: string) {
     const known = Object.fromEntries(Object.entries(drafts).filter(([k]) => FIELDS[section].some((f) => f.key === k)));
     const clean = cleanFields(section, known);
     if (clean.ok && Object.keys(clean.value).length) {
-      await saveSection(section, clean.value, false, assistantMsg.id);
+      await saveSection(sellerId, section, clean.value, false, assistantMsg.id);
       applied = clean.value;
     }
   }

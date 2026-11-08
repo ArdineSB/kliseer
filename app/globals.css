@@ -231,3 +231,8 @@ td .sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 .chips a:hover { border-color: var(--selection-border); }
 .chips b { display: block; font-weight: 600; }
 .chips span { font-size: 12px; color: var(--text-secondary); }
+
+/* Auth */
+.auth-wrap { min-height: 100vh; display: grid; place-items: center; background: var(--surface-shell); }
+.auth-card { width: 400px; max-width: calc(100vw - 32px); background: var(--surface-canvas); border: 1px solid var(--border-default); border-radius: 14px; box-shadow: var(--shadow-surface); padding: 36px 32px; }
+.auth-submit { width: 100%; }

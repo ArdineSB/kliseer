@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { FIELDS, type FieldValue, type Section, type Seller } from '@/lib/fields';
+import { UploadFiles } from './UploadFiles';
 import { Topbar } from './Topbar';
 
 type Props = { section: Section; seller: Seller; crumbs: string[]; chatHref: string; next: string; back?: string; head: ReactNode };
@@ -91,6 +92,7 @@ export function SetupForm({ section, seller, crumbs, chatHref, next, back, head 
             );
           })}
         </form>
+        {section === 'company' && <UploadFiles />}
       </div>
       <footer className="footer">
         {back && <Link href={back} className="btn btn-ghost">Back</Link>}

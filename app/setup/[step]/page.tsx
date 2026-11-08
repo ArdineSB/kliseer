@@ -7,6 +7,7 @@ import { SetupForm } from '@/components/SetupForm';
 import { Shell } from '@/components/Shell';
 import { Topbar } from '@/components/Topbar';
 import type { Tab } from '@/lib/chat';
+import { ensureSellerId } from '@/lib/session';
 import { FIELDS, SECTIONS, type Section, type Seller } from '@/lib/fields';
 import { getSeller } from '@/lib/seller';
 
@@ -43,7 +44,8 @@ export default async function SetupPage({ params }: PageProps<'/setup/[step]'>) 
   const idx = STEPS.findIndex((s) => s.slug === step);
   if (idx < 0) notFound();
   const s = STEPS[idx];
-  const seller = await getSeller();
+  const sellerId = await ensureSellerId();
+  const seller = await getSeller(sellerId);
   const head = (
     <>
       <Stepper seller={seller} current={idx} />
@@ -53,7 +55,7 @@ export default async function SetupPage({ params }: PageProps<'/setup/[step]'>) 
   );
 
   return (
-    <Shell tab={s.tab} setupStep={idx + 1} chat={{ tab: s.tab, title: s.chat, placeholder: 'Ask Kliseer…' }}>
+    <Shell tab={s.tab} sellerId={sellerId} setupStep={idx + 1} chat={{ tab: s.tab, title: s.chat, placeholder: 'Ask Kliseer…' }}>
       {s.slug === 'review'
         ? <Review seller={seller} head={head} />
         : <SetupForm

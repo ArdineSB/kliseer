@@ -1,6 +1,6 @@
 # Progress log
 
-Updated: 2026-11-07 (Supavisor connection follow-up)
+Updated: 2026-11-08 (frontend wiring: auth, guest, upload, Seer gate, draft email)
 
 ## Current status
 
@@ -56,4 +56,17 @@ Updated: 2026-11-07 (Supavisor connection follow-up)
 
 - 2026-11-07: S12 `austin-permits` and S13 `seattle-electrical` added. First ingest on the app VM: Austin fetched 15,286, kept 13,815, inserted 13,815; Seattle fetched 25,593, kept 20,717, inserted 20,717. Rerun inserted 0. Stored `source_url` is the portal link (Austin 13,815, Seattle 20,717; SODA fallback 0). SODA query for Austin `2025-147767 EP` and Seattle `7128541-EL` returned the same record id. Seattle portal HTML contained `7128541-EL`. Austin portal HTML is a 960-byte shell and did not contain the permit number. Companies: TX 2,684, WA 1,069. 47 signals attached to existing NY rows because `name_key` is global; those names do not get the outside-region badge. Public `/seer/{id}` for one TX and one WA company returned HTTP 200 and `Outside service region`.
 - 2026-11-07: `kliseer-deploy` crontab runs `npm run ingest` at 06:00 UTC from `/opt/kliseer/current`. Log: `/var/log/kliseer-ingest.log` (not `/opt/kliseer`, because the app lives on the `current` symlink). `README.md` documents Vultr usage, architecture, local setup, and env keys.
+
+## Frontend wiring (2026-11-08)
+
+- Auth/guest live: `lib/session.ts` resolves a seller from the session cookie, then the guest cookie; `proxy.ts` issues the anonymous guest token (page renders cannot set cookies in Next 16), `ensureSellerId` creates the guest row lazily. `/api/auth/[action]` handles login/signup/logout with the G4 copy strings verbatim. Signup/login claim the guest row (G2: filled account wins, empty account adopts the guest row and chat). `proxy.ts` Basic Auth removed — app auth is the only gate now. Pages `/login` and `/create-account` render `components/AuthForm.tsx` (shared, states empty/filled/submitting/error; disabled submit while empty or submitting).
+- All data paths off `SELLER_ID=1`: `getSeller`/`saveSection`/`thread`/`threadHeads`/`sendMessage`/`listProspects`/`getProspect` take a sellerId. API routes resolve it via `ensureSellerId`.
+- Seer: reads materialized `companies.score/tier/*_stars` (falls back to `tierFromCounts` if not refreshed), sorts by score, default view shows top 20 with the `Upgrade to view all` gate (Q6, UI-only; gate hides on any filter or paging). Empty state offers `Edit target`; filtered-empty offers `Clear search`.
+- Detail: Analysis section shows Keyword/Freshness/Place/Target fit 0–5 star rows + `Overall n / 20` (G8, AI never computes scores); Contacts from the seeded 13 rows with per-contact `Source` link, honest `No contact found` otherwise; Email draft panel (`components/DraftPanel.tsx` + `/api/prospects/[id]/draft`) stores `{contact.name}` token, one row per (seller, company), Generate calls the LLM with real signals, Save writes the token text back; Sources last.
+- Upload (`components/UploadFiles.tsx` on setup/company + `/api/upload`): multi picker + dropzone, per-file Reading…/Ready/Error with exact `Could not read that file.`, retry only re-opens the picker, remove drops the row only, drafts saved with quote + filename attribution, no auto-approve, original never persisted.
+- Shell sidebar shows `Log in` for guests and `Log out` for users (G3).
+
+- Smoke (dev, port 3018): home 200 (guest cookie issued), seer 200 with gate rendered, signup 200 (guest row claimed, session cookie set), login 200, bad password 401 with `Email or password is not valid.`, upload 2-file batch → 1 ready with citation + 1 error (exact copy), draft generate 200 (LLM live, token stored), draft save 200, WCK detail shows `No contact found` + source link, Hivolts detail shows both seeded contacts. Smoke users/guests/drafts deleted after; `sellers=1` (Harborline).
+- `npm run check`, `tsc --noEmit`, `eslint .`, `npm run build` all pass.
+- Not done (out of scope this pass): landing Astro + `/app` basePath (plan step 5), score-refresh against the new materialized columns is unchanged (cron), contact auto-lookup (C0) still backend-only, auth-form visual parity with FigCraft frames unverified (vision QA unavailable this session).
 - 2026-11-07: Seer aggregate measured through an SSH tunnel from this laptop to Supabase via the app VM. `EXPLAIN ANALYZE` of the 365-day company aggregate: 3901 ms, parallel seq scan, 363 rows filtered out of 237,239 signals, 22,509 companies returned. Direct 5432 from this laptop still times out. Counts at measure time: 238,328 signals, 22,556 companies.

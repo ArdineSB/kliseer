@@ -3,8 +3,9 @@ import { Icon } from '@/components/Icon';
 import { Shell } from '@/components/Shell';
 import { TierBadge } from '@/components/TierBadge';
 import { Topbar } from '@/components/Topbar';
-import { listProspects, type ProspectFilter } from '@/lib/prospects';
+import { listProspects, TOP, type ProspectFilter } from '@/lib/prospects';
 import { SOURCES } from '@/lib/sources';
+import { ensureSellerId } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,7 +21,8 @@ export default async function SeerPage({ searchParams }: PageProps<'/seer'>) {
     source: SOURCES.find((s) => s.id === one(sp.source))?.id,
     page: Math.max(1, Number(one(sp.page)) || 1),
   };
-  const r = await listProspects(f);
+  const sellerId = await ensureSellerId();
+  const r = await listProspects(sellerId, f);
   const href = (patch: Partial<ProspectFilter>) => {
     const p = new URLSearchParams();
     const next = { ...f, page: undefined, ...patch };
@@ -29,16 +31,18 @@ export default async function SeerPage({ searchParams }: PageProps<'/seer'>) {
     return qs ? `/seer?${qs}` : '/seer';
   };
   const filtered = Boolean(f.q || f.tier || f.source);
-  const pages = Math.max(1, Math.ceil(r.filteredTotal / r.pageSize));
+  // Q6: default view shows the top 20; the rest sits behind the upgrade gate (UI only, no billing).
+  const gated = !filtered && (f.page ?? 1) === 1 && r.items.length > TOP;
+  const items = gated ? r.items.slice(0, TOP) : r.items;
 
   return (
-    <Shell tab="seer" chat={{ tab: 'seer', title: 'Seer chat', placeholder: 'Ask about these prospects…' }}>
+    <Shell tab="seer" sellerId={sellerId} chat={{ tab: 'seer', title: 'Seer chat', placeholder: 'Ask about these prospects…' }}>
       <Topbar crumbs={['Seer', 'Prospects']} />
       <div className="content">
         <div className="page-head">
           <div>
             <h1>Prospects</h1>
-            <p className="lede">Companies with dated public signals, ranked by recency and match with your products.</p>
+            <p className="lede">Companies with dated public signals, ranked by fit with your products.</p>
           </div>
         </div>
 
@@ -72,45 +76,52 @@ export default async function SeerPage({ searchParams }: PageProps<'/seer'>) {
         {r.summary.total === 0 && !filtered ? (
           <div className="card empty">
             <h2>No prospects yet</h2>
-            <p>No signals from connected sources in the last 365 days. Run the ingest, then reload.</p>
+            <p>No signals from connected sources in the last 365 days. <Link href="/setup/review" className="link">Edit target</Link></p>
           </div>
         ) : r.items.length === 0 ? (
           <div className="card empty">
             <h2>No prospects match these filters</h2>
-            <p><Link href="/seer" className="link">Clear filters</Link></p>
+            <p><Link href="/seer" className="link">Clear search</Link></p>
           </div>
         ) : (
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr><th scope="col">Tier</th><th scope="col">Company</th><th scope="col">Latest signal</th><th scope="col" style={{ textAlign: 'right' }}>Signals 90d</th><th scope="col">Last signal</th></tr>
-              </thead>
-              <tbody>
-                {r.items.map((p) => (
-                  <tr key={p.id}>
-                    <td><TierBadge tier={p.tier} /></td>
-                    <td>
-                      <Link href={`/seer/${p.id}`} className="row-link">{p.name}</Link>
-                      <div className="sub">
-                        {p.sources.join(', ')}
-                        {p.outsideRegion && <> · <span className="badge badge-warn">Outside service region</span></>}
-                      </div>
-                    </td>
-                    <td><div className="clamp">{p.lastSummary}</div><div className="sub">{p.matched > 0 ? `${p.matched} signal${p.matched === 1 ? '' : 's'} matched your keywords` : 'No product keyword matched'}</div></td>
-                    <td className="num" style={{ textAlign: 'right' }}>{p.recent}</td>
-                    <td className="num" style={{ whiteSpace: 'nowrap' }}>{fmt(p.lastDate)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="table-foot">
-              <span className="num">Showing {((r.page - 1) * r.pageSize + 1).toLocaleString('en-US')}–{Math.min(r.page * r.pageSize, r.filteredTotal).toLocaleString('en-US')} of {r.filteredTotal.toLocaleString('en-US')}</span>
-              <nav className="pager" aria-label="Pages">
-                {r.page > 1 && <Link className="link" href={href({ page: r.page - 1 })}>Previous</Link>}
-                {r.page < pages && <Link className="link" href={href({ page: r.page + 1 })}>Next</Link>}
-              </nav>
+          <>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr><th scope="col">Tier</th><th scope="col">Company</th><th scope="col">Score</th><th scope="col">Latest signal</th><th scope="col" style={{ textAlign: 'right' }}>Signals 90d</th><th scope="col">Last signal</th></tr>
+                </thead>
+                <tbody>
+                  {items.map((p) => (
+                    <tr key={p.id}>
+                      <td><TierBadge tier={p.tier} /></td>
+                      <td>
+                        <Link href={`/seer/${p.id}`} className="row-link">{p.name}</Link>
+                        <div className="sub">{p.sources.join(', ')}</div>
+                      </td>
+                      <td className="num">{p.score ?? '—'}</td>
+                      <td><div className="clamp">{p.lastSummary}</div><div className="sub">{p.matched > 0 ? `${p.matched} signal${p.matched === 1 ? '' : 's'} matched your keywords` : 'No product keyword matched'}</div></td>
+                      <td className="num" style={{ textAlign: 'right' }}>{p.recent}</td>
+                      <td className="num" style={{ whiteSpace: 'nowrap' }}>{fmt(p.lastDate)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {gated ? (
+                <div className="upgrade-gate" style={{ padding: '20px', textAlign: 'center', borderTop: '1px solid var(--border-default)' }}>
+                  <b>Upgrade to view all</b>
+                  <p className="muted" style={{ fontSize: 13, margin: '6px 0 0' }}>You are viewing the top {TOP} prospects.</p>
+                </div>
+              ) : (
+                <div className="table-foot">
+                  <span className="num">Showing {((r.page - 1) * r.pageSize + 1).toLocaleString('en-US')}–{Math.min(r.page * r.pageSize, r.filteredTotal).toLocaleString('en-US')} of {r.filteredTotal.toLocaleString('en-US')}</span>
+                  <nav className="pager" aria-label="Pages">
+                    {r.page > 1 && <Link className="link" href={href({ page: r.page - 1 })}>Previous</Link>}
+                    {r.page < Math.max(1, Math.ceil(r.filteredTotal / r.pageSize)) && <Link className="link" href={href({ page: r.page + 1 })}>Next</Link>}
+                  </nav>
+                </div>
+              )}
             </div>
-          </div>
+          </>
         )}
       </div>
     </Shell>

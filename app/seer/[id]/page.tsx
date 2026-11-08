@@ -5,30 +5,36 @@ import { Shell } from '@/components/Shell';
 import { TierBadge } from '@/components/TierBadge';
 import { Topbar } from '@/components/Topbar';
 import { getProspect } from '@/lib/prospects';
-import { RECENT_DAYS } from '@/lib/tier';
+import { ensureSellerId } from '@/lib/session';
+import { DraftPanel } from '@/components/DraftPanel';
 
 export const dynamic = 'force-dynamic';
 
 const fmt = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
-// Plain-language reason for the tier; describes evidence, never a claim the company will buy (D-25).
-const WHY: Record<string, string> = {
-  S: `Two or more signals in the last ${RECENT_DAYS} days, at least one matching your products.`,
-  A: `One signal in the last ${RECENT_DAYS} days that matches your products.`,
-  B: `Recent signals, but none mention your product keywords.`,
-  C: `No signals in the last ${RECENT_DAYS} days; older signals within a year.`,
-  '—': 'No signals from connected sources.',
-};
+const STAR_LABEL = { keyword: 'Keyword', freshness: 'Freshness', place: 'Place', targetFit: 'Target fit' } as const;
+type StarKey = keyof typeof STAR_LABEL;
+const starValue = (v: number | null) => (v === null ? '—' : `${v} / 5`);
+
+function Stars({ n }: { n: number | null }) {
+  return (
+    <span aria-hidden="true" style={{ letterSpacing: 1, color: 'var(--action-primary)' }}>
+      {Array.from({ length: 5 }, (_, i) => (n !== null && i < n ? '★' : '☆')).join('')}
+    </span>
+  );
+}
 
 export default async function ProspectPage({ params }: PageProps<'/seer/[id]'>) {
   const id = Number((await params).id);
   if (!Number.isInteger(id) || id <= 0) notFound();
-  const p = await getProspect(id);
+  const sellerId = await ensureSellerId();
+  const p = await getProspect(sellerId, id);
   if (!p) notFound();
   const region = [...new Set(p.signals.map((s) => s.region).filter(Boolean))].slice(0, 3).join(', ');
+  const starRows = (Object.keys(STAR_LABEL) as StarKey[]).map((k) => ({ key: k, label: STAR_LABEL[k], value: p.stars[k] }));
 
   return (
-    <Shell tab="seer" chat={{ tab: 'seer', title: 'Seer chat', placeholder: 'Ask about these prospects…' }}>
+    <Shell tab="seer" sellerId={sellerId} chat={{ tab: 'seer', title: 'Seer chat', placeholder: 'Ask about these prospects…' }}>
       <Topbar crumbs={['Seer', 'Prospects', p.name]} />
       <div className="content">
         <Link href="/seer" className="link" style={{ color: 'var(--text-secondary)', marginBottom: 20 }}><Icon name="arrowLeft" /> Back to prospects</Link>
@@ -41,13 +47,67 @@ export default async function ProspectPage({ params }: PageProps<'/seer/[id]'>) 
           {p.outsideRegion && <> · <span className="badge badge-warn">Outside service region</span></>}
         </p>
 
-        <section className="card" style={{ marginTop: 24 }} aria-labelledby="why-now">
-          <div className="card-head"><h2 id="why-now" style={{ fontSize: 14 }}>Why now</h2><span className="muted" style={{ fontSize: 12 }}>{WHY[p.tier]}</span></div>
+        {/* Analysis — four 0–5 star rows + overall; scores are materialized, never LLM-computed (G8). */}
+        <section className="card" style={{ marginTop: 24 }} aria-labelledby="analysis">
+          <div className="card-head">
+            <h2 id="analysis" style={{ fontSize: 14 }}>Analysis</h2>
+            <span className="num" style={{ fontWeight: 600 }}>Overall {p.score ?? '—'} / 20</span>
+          </div>
+          <div className="card-body">
+            {starRows.map((r) => (
+              <div key={r.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0' }}>
+                <span>{r.label}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <Stars n={r.value} />
+                  <b className="num">{starValue(r.value)}</b>
+                </span>
+              </div>
+            ))}
+            <p className="muted" style={{ fontSize: 12, margin: '10px 0 0' }}>
+              Scores are computed from dated public signals only. AI writes the interpretation below and never the scores.
+            </p>
+          </div>
+        </section>
+
+        {/* Contacts — seeded rows with sourceUrl per field (Q12/Q18). No row → honest not-found. */}
+        <section className="card" style={{ marginTop: 16 }} aria-labelledby="contacts">
+          <div className="card-head"><h2 id="contacts" style={{ fontSize: 14 }}>Contacts</h2></div>
+          {p.contacts.length === 0 ? (
+            <div className="card-body muted">No contact found. <a href={p.signals[0]?.url ?? '/seer'} target="_blank" rel="noopener noreferrer" className="link">See the source record</a></div>
+          ) : (
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+              {p.contacts.map((c) => (
+                <li key={c.id} className="card-body" style={{ borderTop: '1px solid var(--border-row)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span className="brand-mark" aria-hidden="true" style={{ textTransform: 'uppercase' }}>{c.name.slice(0, 1)}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600 }}>{c.name}{c.title ? <span className="muted" style={{ fontWeight: 400 }}> · {c.title}</span> : null}</div>
+                    <div className="muted" style={{ fontSize: 12 }}>
+                      {c.email ? <a href={`mailto:${c.email}`} className="link" style={{ marginRight: 8 }}>{c.email}</a> : <span style={{ marginRight: 8 }}>Email: not found</span>}
+                      <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="link">Source</a>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        {/* Email draft — one stored row per (seller, prospect); {contact.name} replaced at display (Q8). */}
+        <DraftPanel
+          companyId={p.id}
+          companyName={p.name}
+          contacts={p.contacts.map((c) => ({ id: c.id, name: c.name }))}
+          draft={p.draft}
+        />
+
+        {/* Sources last (DESIGN.md frame 7–9 order). */}
+        <section className="card" style={{ marginTop: 16 }} aria-labelledby="sources">
+          <div className="card-head"><h2 id="sources" style={{ fontSize: 14 }}>Sources</h2><span className="muted" style={{ fontSize: 12 }}>{p.totalSignals} signals</span></div>
           {p.signals.length === 0 ? (
             <div className="card-body muted"><Icon name="activity" /> No signals from connected sources.</div>
           ) : (
             <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-              {p.signals.map((s) => (
+              {p.signals.slice(0, 20).map((s) => (
                 <li key={s.id} className="signal">
                   <div>
                     <div className="num">{fmt(s.date)}</div>
@@ -63,20 +123,6 @@ export default async function ProspectPage({ params }: PageProps<'/seer/[id]'>) 
             </ul>
           )}
         </section>
-
-        <div className="detail-grid">
-          <section className="card" aria-labelledby="dm">
-            <div className="card-head"><h2 id="dm" style={{ fontSize: 14 }}>Decision makers</h2></div>
-            <div className="card-body"><b>No decision makers yet</b><p className="muted" style={{ margin: '4px 0 0' }}>No connected source lists a contact with a source we can show.</p></div>
-          </section>
-          <section className="card" aria-labelledby="cw">
-            <div className="card-head"><h2 id="cw" style={{ fontSize: 14 }}>Signal activity</h2></div>
-            <div className="card-body kv">
-              <div><span>Signals shown</span><b className="num">{p.signals.length}{p.totalSignals > p.signals.length ? ` of ${p.totalSignals}` : ''}</b></div>
-              <div><span>Latest</span><b className="num">{p.signals[0] ? fmt(p.signals[0].date) : '—'}</b></div>
-            </div>
-          </section>
-        </div>
       </div>
     </Shell>
   );

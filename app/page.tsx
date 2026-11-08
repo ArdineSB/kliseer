@@ -3,14 +3,16 @@ import { ChatPanel } from '@/components/ChatPanel';
 import { NAV, Shell } from '@/components/Shell';
 import { Topbar } from '@/components/Topbar';
 import { thread, threadHeads } from '@/lib/chat';
+import { ensureSellerId } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [messages, heads] = await Promise.all([thread('home'), threadHeads()]);
+  const sellerId = await ensureSellerId();
+  const [messages, heads] = await Promise.all([thread(sellerId, 'home'), threadHeads(sellerId)]);
   const others = heads.filter((h) => h.tab !== 'home');
   return (
-    <Shell tab="home">
+    <Shell tab="home" sellerId={sellerId}>
       <Topbar crumbs={['Home']} />
       <div className="home">
         <nav className="history" aria-label="Chat history by tab">
