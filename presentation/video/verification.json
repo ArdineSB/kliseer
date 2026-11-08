@@ -1,0 +1,17 @@
+{
+  "videoCodec": "h264",
+  "audioCodec": "aac",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "frames": 8403,
+  "videoSeconds": 280.1,
+  "audioSeconds": 280.107,
+  "bytes": 15815496,
+  "captionPhrases": 68,
+  "voice": "Microsoft Zira Desktop",
+  "peakDb": -1.4,
+  "meanDb": -16.7,
+  "fullDecode": "passed",
+  "sampledScenes": 12
+}

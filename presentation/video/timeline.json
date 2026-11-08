@@ -1,0 +1,723 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "frames": 8403,
+  "seconds": 280.1,
+  "voice": "Microsoft Zira Desktop",
+  "rate": 1,
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "From public signals to a smarter first move.",
+      "section": "THE PITCH",
+      "file": "track-01.wav",
+      "narration": "Sales teams do not need another list of company names. They need a reason to reach out. Kliseer connects seller context, dated public signals, and reviewable outreach, helping building-material and electrical suppliers decide where to focus next.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " Sales teams do not need another list of company names.",
+          "startMs": 0,
+          "endMs": 4025,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " They need a reason to reach out.",
+          "startMs": 4025,
+          "endMs": 6115,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Kliseer connects seller context, dated public signals, and reviewable outreach,",
+          "startMs": 6115,
+          "endMs": 10315,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " helping building-material and electrical suppliers decide where to focus next.",
+          "startMs": 10315,
+          "endMs": 15220,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 0,
+      "frames": 493,
+      "audioDuration": 16.025
+    },
+    {
+      "slide": 2,
+      "title": "A prospect list is not a reason to reach out.",
+      "section": "THE PROBLEM",
+      "file": "track-02.wav",
+      "narration": "For a supplier, prospect research means connecting several pieces: what we sell, which companies fit, and what has recently happened. A public permit can be useful, but it still needs context. The challenge is turning that scattered information into a clear, defensible next step, without pretending that activity equals buying intent.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " For a supplier, prospect research means connecting several pieces: what we sell,",
+          "startMs": 0,
+          "endMs": 4680,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " which companies fit, and what has recently happened.",
+          "startMs": 4680,
+          "endMs": 8245,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " A public permit can be useful, but it still needs context.",
+          "startMs": 8245,
+          "endMs": 12090,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " The challenge is turning that scattered information into a clear, defensible next",
+          "startMs": 12090,
+          "endMs": 15690,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " step, without pretending that activity equals buying intent.",
+          "startMs": 15690,
+          "endMs": 19970,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 493,
+      "frames": 636,
+      "audioDuration": 20.775
+    },
+    {
+      "slide": 3,
+      "title": "Klise understands you. Seer finds the signal.",
+      "section": "THE SOLUTION",
+      "file": "track-03.wav",
+      "narration": "Kliseer brings that work into one workspace. Klise helps turn company information into a profile and target criteria that the seller reviews. Seer surfaces prospects with dated evidence and explainable scores. From there, the seller can inspect contacts, ask questions, and prepare an outreach draft, while keeping control of the final decision.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " Kliseer brings that work into one workspace.",
+          "startMs": 0,
+          "endMs": 3600,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Klise helps turn company information into a profile and target criteria that the",
+          "startMs": 3600,
+          "endMs": 7445,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " seller reviews. Seer surfaces prospects with dated evidence and explainable scores.",
+          "startMs": 7445,
+          "endMs": 13150,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " From there, the seller can inspect contacts, ask questions, and prepare an outreach",
+          "startMs": 13150,
+          "endMs": 17335,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " draft, while keeping control of the final decision.",
+          "startMs": 17335,
+          "endMs": 21195,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 1129,
+      "frames": 672,
+      "audioDuration": 22
+    },
+    {
+      "slide": 4,
+      "title": "Start with the business you already know.",
+      "section": "DEMO / COMPANY CONTEXT",
+      "file": "track-04.wav",
+      "narration": "For this walkthrough, we use Harborline Electrical Supply, a fictional distributor serving New York and New Jersey. The seller can upload company materials or describe the business in chat. Klise prepares editable fields, including products and service regions. Each setup section is reviewed separately before approval, so an AI suggestion does not silently become an accepted fact.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " For this walkthrough, we use Harborline Electrical Supply, a fictional distributor",
+          "startMs": 0,
+          "endMs": 4635,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " serving New York and New Jersey.",
+          "startMs": 4635,
+          "endMs": 7330,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " The seller can upload company materials or describe the business in chat.",
+          "startMs": 7330,
+          "endMs": 11420,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Klise prepares editable fields, including products and service regions.",
+          "startMs": 11420,
+          "endMs": 15885,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Each setup section is reviewed separately before approval, so an AI suggestion does",
+          "startMs": 15885,
+          "endMs": 20105,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " not silently become an accepted fact.",
+          "startMs": 20105,
+          "endMs": 23010,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 1801,
+      "frames": 727,
+      "audioDuration": 23.815
+    },
+    {
+      "slide": 5,
+      "title": "Turn public activity into a shortlist.",
+      "section": "DEMO / PROSPECT DISCOVERY",
+      "file": "track-05.wav",
+      "narration": "Seer uses public permit sources from New York City, Austin, and Seattle. It surfaces companies with a signal in the last year, then applies rules for keyword matches, freshness, location, and target fit. These factors produce a score and tier. The language model does not assign those numbers. This is prioritization based on observable evidence, not a prediction that a company is ready to buy.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " Seer uses public permit sources from New York City, Austin, and Seattle.",
+          "startMs": 0,
+          "endMs": 5110,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " It surfaces companies with a signal in the last year, then applies rules for",
+          "startMs": 5110,
+          "endMs": 8725,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " keyword matches, freshness, location, and target fit.",
+          "startMs": 8725,
+          "endMs": 13405,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " These factors produce a score and tier.",
+          "startMs": 13405,
+          "endMs": 15995,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " The language model does not assign those numbers.",
+          "startMs": 15995,
+          "endMs": 18995,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " This is prioritization based on observable evidence, not a prediction that a",
+          "startMs": 18995,
+          "endMs": 22780,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " company is ready to buy.",
+          "startMs": 22780,
+          "endMs": 24640,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 2528,
+      "frames": 776,
+      "audioDuration": 25.445
+    },
+    {
+      "slide": 6,
+      "title": "Show the evidence behind the priority.",
+      "section": "DEMO / ONE CONCRETE EXAMPLE",
+      "file": "track-06.wav",
+      "narration": "Here is a concrete historical example: Hivolts Electrical in Brooklyn. In the November seventh snapshot, its score was sixteen out of twenty, or Tier S. The cited November first permit describes temporary power and generator-hoist work. That suggests relevance to an electrical supplier, but not a confirmed purchase. Target fit was only one out of five, so the seller can see both the supporting evidence and the limitation.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " Here is a concrete historical example: Hivolts Electrical in Brooklyn.",
+          "startMs": 0,
+          "endMs": 5085,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " In the November seventh snapshot, its score was sixteen out of twenty, or Tier S.",
+          "startMs": 5085,
+          "endMs": 9535,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " The cited November first permit describes temporary power and generator-hoist work.",
+          "startMs": 9535,
+          "endMs": 14455,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " That suggests relevance to an electrical supplier, but not a confirmed purchase.",
+          "startMs": 14455,
+          "endMs": 19205,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Target fit was only one out of five, so the seller can see both the supporting",
+          "startMs": 19205,
+          "endMs": 22645,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " evidence and the limitation.",
+          "startMs": 22645,
+          "endMs": 24980,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 3304,
+      "frames": 786,
+      "audioDuration": 25.785
+    },
+    {
+      "slide": 7,
+      "title": "A next step you can review. Not autopilot.",
+      "section": "DEMO / OUTREACH",
+      "file": "track-07.wav",
+      "narration": "Once a prospect looks relevant, the seller checks the available contact and its source. Kliseer can then draft a first-touch email using seller information and dated signals. The message stays editable, and Kliseer does not send it. Provider-supplied contact details are not treated as verified. The seller still needs to confirm the recipient, the facts, and whether the outreach makes sense.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " Once a prospect looks relevant, the seller checks the available contact and its",
+          "startMs": 0,
+          "endMs": 4240,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " source. Kliseer can then draft a first-touch email using seller information and",
+          "startMs": 4240,
+          "endMs": 9080,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " dated signals. The message stays editable, and Kliseer does not send it.",
+          "startMs": 9080,
+          "endMs": 14505,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Provider-supplied contact details are not treated as verified.",
+          "startMs": 14505,
+          "endMs": 18330,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " The seller still needs to confirm the recipient, the facts, and whether the",
+          "startMs": 18330,
+          "endMs": 22040,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " outreach makes sense.",
+          "startMs": 22040,
+          "endMs": 23995,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 4090,
+      "frames": 756,
+      "audioDuration": 24.8
+    },
+    {
+      "slide": 8,
+      "title": "Ask questions against your workspace.",
+      "section": "DEMO / GROUNDED CHAT",
+      "file": "track-08.wav",
+      "narration": "The chat also works with the current workspace: the seller profile, top Seer prospects, and sourced contact records. A rep can compare candidates, ask who has available contacts, or identify promising prospects that still need contact research. Missing details should remain missing, rather than being filled with a plausible-looking email address or an invented decision-maker.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " The chat also works with the current workspace: the seller profile, top Seer",
+          "startMs": 0,
+          "endMs": 4630,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " prospects, and sourced contact records.",
+          "startMs": 4630,
+          "endMs": 8085,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " A rep can compare candidates, ask who has available contacts, or identify promising",
+          "startMs": 8085,
+          "endMs": 12730,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " prospects that still need contact research.",
+          "startMs": 12730,
+          "endMs": 15985,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Missing details should remain missing, rather than being filled with a",
+          "startMs": 15985,
+          "endMs": 19070,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " plausible-looking email address or an invented decision-maker.",
+          "startMs": 19070,
+          "endMs": 22625,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 4846,
+      "frames": 715,
+      "audioDuration": 23.43
+    },
+    {
+      "slide": 9,
+      "title": "Vultr powers the working system.",
+      "section": "TECHNOLOGY",
+      "file": "track-09.wav",
+      "narration": "Vultr is central to the backend, not just a place to host a page. Cloud Compute runs the Next.js application and the scheduled public-data ingestion. Supabase, deployed through Vultr Marketplace, stores profiles, conversations, companies, and signals. Vultr Serverless Inference supports AI drafting and contextual responses. The important separation is that application rules calculate scores, while the model helps interpret and communicate the supplied information.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " Vultr is central to the backend, not just a place to host a page.",
+          "startMs": 0,
+          "endMs": 4735,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Cloud Compute runs the Next.js application and the scheduled public-data ingestion.",
+          "startMs": 4735,
+          "endMs": 9785,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Supabase, deployed through Vultr Marketplace, stores profiles, conversations,",
+          "startMs": 9785,
+          "endMs": 14215,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " companies, and signals. Vultr Serverless Inference supports AI drafting and",
+          "startMs": 14215,
+          "endMs": 19625,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " contextual responses. The important separation is that application rules calculate",
+          "startMs": 19625,
+          "endMs": 24085,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " scores, while the model helps interpret and communicate the supplied information.",
+          "startMs": 24085,
+          "endMs": 29390,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 5561,
+      "frames": 918,
+      "audioDuration": 30.195
+    },
+    {
+      "slide": 10,
+      "title": "Useful AI has clear boundaries.",
+      "section": "TRUST BY DESIGN",
+      "file": "track-10.wav",
+      "narration": "Three boundaries matter. A relevance score is not buying intent. A sourced contact is not automatically a verified contact. And a generated draft is not a sent email. Kliseer makes these distinctions visible and keeps review with the seller. That is the product's approach: assist real sales work without disguising uncertainty as confidence.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " Three boundaries matter. A relevance score is not buying intent.",
+          "startMs": 0,
+          "endMs": 5010,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " A sourced contact is not automatically a verified contact.",
+          "startMs": 5010,
+          "endMs": 8770,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " And a generated draft is not a sent email.",
+          "startMs": 8770,
+          "endMs": 11605,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Kliseer makes these distinctions visible and keeps review with the seller.",
+          "startMs": 11605,
+          "endMs": 15670,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " That is the product's approach: assist real sales work without disguising",
+          "startMs": 15670,
+          "endMs": 18760,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " uncertainty as confidence.",
+          "startMs": 18760,
+          "endMs": 21440,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 6479,
+      "frames": 680,
+      "audioDuration": 22.245
+    },
+    {
+      "slide": 11,
+      "title": "A clearer decision, not just more data.",
+      "section": "BUSINESS VALUE",
+      "file": "track-11.wav",
+      "narration": "The intended value is a more focused research workflow: understand the seller, prioritize with evidence, and prepare a relevant first conversation. We are not claiming measured revenue gains or hours saved. Those are things to validate. The next evaluation should measure time to a reviewed shortlist, evidence accuracy, and whether sales reps find the resulting drafts useful.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " The intended value is a more focused research workflow: understand the seller,",
+          "startMs": 0,
+          "endMs": 4175,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " prioritize with evidence, and prepare a relevant first conversation.",
+          "startMs": 4175,
+          "endMs": 8790,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " We are not claiming measured revenue gains or hours saved.",
+          "startMs": 8790,
+          "endMs": 12260,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Those are things to validate. The next evaluation should measure time to a reviewed",
+          "startMs": 12260,
+          "endMs": 16285,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " shortlist, evidence accuracy, and whether sales reps find the resulting drafts",
+          "startMs": 16285,
+          "endMs": 20730,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " useful.",
+          "startMs": 20730,
+          "endMs": 22265,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 7159,
+      "frames": 705,
+      "audioDuration": 23.07
+    },
+    {
+      "slide": 12,
+      "title": "Know why. Then make your move.",
+      "section": "THE CLOSE",
+      "file": "track-12.wav",
+      "narration": "Kliseer turns scattered business information into a reviewed path from context to outreach. Built on Vultr, it helps suppliers understand why a prospect deserves attention and what still needs checking. That is Kliseer: know why, then make your move. Thank you.",
+      "voice": "Microsoft Zira Desktop",
+      "rate": 1,
+      "captions": [
+        {
+          "text": " Kliseer turns scattered business information into a reviewed path from context to",
+          "startMs": 0,
+          "endMs": 4325,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " outreach. Built on Vultr, it helps suppliers understand why a prospect deserves",
+          "startMs": 4325,
+          "endMs": 9135,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " attention and what still needs checking.",
+          "startMs": 9135,
+          "endMs": 11865,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " That is Kliseer: know why, then make your move.",
+          "startMs": 11865,
+          "endMs": 15515,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        },
+        {
+          "text": " Thank you.",
+          "startMs": 15515,
+          "endMs": 16760,
+          "timestampMs": null,
+          "confidence": null,
+          "pageBreakAfter": true
+        }
+      ],
+      "startFrame": 7864,
+      "frames": 539,
+      "audioDuration": 17.565
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+KLISEER — ENGLISH TELEPROMPTER
+Target: 4:40. Bracketed slide markers are not spoken.
+
+[SLIDE 1 | 0:00–0:18]
+
+Sales teams do not need another list of company names. They need a reason to reach out. Kliseer connects seller context, dated public signals, and reviewable outreach, helping building-material and electrical suppliers decide where to focus next.
+
+[SLIDE 2 | 0:18–0:41]
+
+For a supplier, prospect research means connecting several pieces: what we sell, which companies fit, and what has recently happened. A public permit can be useful, but it still needs context. The challenge is turning that scattered information into a clear, defensible next step, without pretending that activity equals buying intent.
+
+[SLIDE 3 | 0:41–1:03]
+
+Kliseer brings that work into one workspace. Klise helps turn company information into a profile and target criteria that the seller reviews. Seer surfaces prospects with dated evidence and explainable scores. From there, the seller can inspect contacts, ask questions, and prepare an outreach draft, while keeping control of the final decision.
+
+[SLIDE 4 | 1:03–1:26]
+
+For this walkthrough, we use Harborline Electrical Supply, a fictional distributor serving New York and New Jersey. The seller can upload company materials or describe the business in chat. Klise prepares editable fields, including products and service regions. Each setup section is reviewed separately before approval, so an AI suggestion does not silently become an accepted fact.
+
+[SLIDE 5 | 1:26–1:53]
+
+Seer uses public permit sources from New York City, Austin, and Seattle. It surfaces companies with a signal in the last year, then applies rules for keyword matches, freshness, location, and target fit. These factors produce a score and tier. The language model does not assign those numbers. This is prioritization based on observable evidence, not a prediction that a company is ready to buy.
+
+[SLIDE 6 | 1:53–2:22]
+
+Here is a concrete historical example: Hivolts Electrical in Brooklyn. In the November seventh snapshot, its score was sixteen out of twenty, or Tier S. The cited November first permit describes temporary power and generator-hoist work. That suggests relevance to an electrical supplier, but not a confirmed purchase. Target fit was only one out of five, so the seller can see both the supporting evidence and the limitation.
+
+[SLIDE 7 | 2:22–2:47]
+
+Once a prospect looks relevant, the seller checks the available contact and its source. Kliseer can then draft a first-touch email using seller information and dated signals. The message stays editable, and Kliseer does not send it. Provider-supplied contact details are not treated as verified. The seller still needs to confirm the recipient, the facts, and whether the outreach makes sense.
+
+[SLIDE 8 | 2:47–3:09]
+
+The chat also works with the current workspace: the seller profile, top Seer prospects, and sourced contact records. A rep can compare candidates, ask who has available contacts, or identify promising prospects that still need contact research. Missing details should remain missing, rather than being filled with a plausible-looking email address or an invented decision-maker.
+
+[SLIDE 9 | 3:09–3:39]
+
+Vultr is central to the backend, not just a place to host a page. Cloud Compute runs the Next.js application and the scheduled public-data ingestion. Supabase, deployed through Vultr Marketplace, stores profiles, conversations, companies, and signals. Vultr Serverless Inference supports AI drafting and contextual responses. The important separation is that application rules calculate scores, while the model helps interpret and communicate the supplied information.
+
+[SLIDE 10 | 3:39–4:00]
+
+Three boundaries matter. A relevance score is not buying intent. A sourced contact is not automatically a verified contact. And a generated draft is not a sent email. Kliseer makes these distinctions visible and keeps review with the seller. That is the product's approach: assist real sales work without disguising uncertainty as confidence.
+
+[SLIDE 11 | 4:00–4:22]
+
+The intended value is a more focused research workflow: understand the seller, prioritize with evidence, and prepare a relevant first conversation. We are not claiming measured revenue gains or hours saved. Those are things to validate. The next evaluation should measure time to a reviewed shortlist, evidence accuracy, and whether sales reps find the resulting drafts useful.
+
+[SLIDE 12 | 4:22–4:40]
+
+Kliseer turns scattered business information into a reviewed path from context to outreach. Built on Vultr, it helps suppliers understand why a prospect deserves attention and what still needs checking. That is Kliseer: know why, then make your move. Thank you.

@@ -52,8 +52,9 @@ const factors = [{ name: 'Keyword', value: 5, reason: 'Recent signals match prod
               <source media="(max-width: 600px)" srcset={mobilePreview.src} width="684" height="940" />
               <img id="hero-preview" src={desktopPreview.src} width="1200" height="488" alt="Kliseer prospect detail for Hivolts Electrical Inc. Historical November 7, 2026 snapshot: overall 16 out of 20, Tier S, with four scoring factors and the supporting dated permit." loading="eager" decoding="async" fetchpriority="high" />
             </picture>
+            <video id="hero-loop" class="hero-loop" width="1200" height="488" poster={desktopPreview.src} muted loop playsinline preload="none" aria-hidden="true"></video>
             <div class="preview-fallback" id="preview-fallback" hidden><strong>From company context to a considered next step.</strong><p>Understand your business. Define your target. Explore sourced prospects. Prepare a draft you review.</p><a href="/app">Explore the live app <Icon name="arrow" /></a></div>
-            <figcaption><span>Kliseer product demonstration</span><span>Historical sample · Nov 7, 2026 · not live results</span></figcaption>
+            <figcaption><span>Kliseer product walkthrough</span><span>Hivolts sample · historical Nov 7, 2026 · not live results</span></figcaption>
           </figure>
           <script is:inline>
             (() => {
@@ -62,6 +63,32 @@ const factors = [{ name: 'Keyword', value: 5, reason: 'Recent signals match prod
               const image = document.getElementById('hero-preview');
               const fallback = document.getElementById('preview-fallback');
               const skip = document.getElementById('skip-intro');
+              const figure = image.closest('figure');
+              const video = document.getElementById('hero-loop');
+              const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+              let videoInView = false;
+              let videoLoaded = false;
+              const syncVideo = () => {
+                if (!video || !figure) return;
+                const canPlay = videoInView && !document.hidden && !reducedMotion.matches && innerWidth > 600 && !image.hidden && fallback.hidden && document.documentElement.dataset.motion !== 'paused';
+                if (!canPlay) { video.pause(); figure.removeAttribute('data-video-playing'); return; }
+                if (!videoLoaded) { video.src = '/media/hero-opening-loop.mp4'; video.load(); videoLoaded = true; }
+                void video.play().catch(() => figure.removeAttribute('data-video-playing'));
+              };
+              if (figure && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver(entries => {
+                  videoInView = entries.some(entry => entry.isIntersecting);
+                  syncVideo();
+                }, { threshold: 0.2 });
+                observer.observe(figure);
+              } else videoInView = true;
+              video?.addEventListener('playing', () => { figure.dataset.videoPlaying = 'true'; });
+              document.addEventListener('visibilitychange', syncVideo);
+              document.addEventListener('kliseer:motion', syncVideo);
+              window.addEventListener('resize', syncVideo, { passive: true });
+              window.addEventListener('pageshow', syncVideo);
+              window.addEventListener('pagehide', () => video?.pause());
+              reducedMotion.addEventListener('change', syncVideo);
               let done = false;
               const release = () => {
                 if (done) return;
@@ -75,6 +102,7 @@ const factors = [{ name: 'Keyword', value: 5, reason: 'Recent signals match prod
                 motion.type = 'module';
                 motion.src = '/motion/main.js';
                 document.body.appendChild(motion);
+                syncVideo();
               };
               const failed = () => { image.hidden = true; fallback.hidden = false; release(); };
               try {

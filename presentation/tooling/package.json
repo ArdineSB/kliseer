@@ -1,0 +1,14 @@
+{
+  "name": "kliseer-presentation-tools",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.cjs"
+  },
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "pptxgenjs": "4.0.1",
+    "sharp": "0.34.5"
+  }
+}

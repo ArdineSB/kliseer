@@ -1,0 +1,90 @@
+{
+  "seconds": 280,
+  "words": 661,
+  "slides": [
+    {
+      "slide": 1,
+      "title": "From public signals to a smarter first move.",
+      "start": 0,
+      "end": 18,
+      "duration": 18
+    },
+    {
+      "slide": 2,
+      "title": "A prospect list is not a reason to reach out.",
+      "start": 18,
+      "end": 41,
+      "duration": 23
+    },
+    {
+      "slide": 3,
+      "title": "Klise understands you. Seer finds the signal.",
+      "start": 41,
+      "end": 63,
+      "duration": 22
+    },
+    {
+      "slide": 4,
+      "title": "Start with the business you already know.",
+      "start": 63,
+      "end": 86,
+      "duration": 23
+    },
+    {
+      "slide": 5,
+      "title": "Turn public activity into a shortlist.",
+      "start": 86,
+      "end": 113,
+      "duration": 27
+    },
+    {
+      "slide": 6,
+      "title": "Show the evidence behind the priority.",
+      "start": 113,
+      "end": 142,
+      "duration": 29
+    },
+    {
+      "slide": 7,
+      "title": "A next step you can review. Not autopilot.",
+      "start": 142,
+      "end": 167,
+      "duration": 25
+    },
+    {
+      "slide": 8,
+      "title": "Ask questions against your workspace.",
+      "start": 167,
+      "end": 189,
+      "duration": 22
+    },
+    {
+      "slide": 9,
+      "title": "Vultr powers the working system.",
+      "start": 189,
+      "end": 219,
+      "duration": 30
+    },
+    {
+      "slide": 10,
+      "title": "Useful AI has clear boundaries.",
+      "start": 219,
+      "end": 240,
+      "duration": 21
+    },
+    {
+      "slide": 11,
+      "title": "A clearer decision, not just more data.",
+      "start": 240,
+      "end": 262,
+      "duration": 22
+    },
+    {
+      "slide": 12,
+      "title": "Know why. Then make your move.",
+      "start": 262,
+      "end": 280,
+      "duration": 18
+    }
+  ]
+}

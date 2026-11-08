@@ -6,7 +6,7 @@ Verified locally on November 8, 2026. No production deployment or remote configu
 
 - Static Astro landing with the five requested sections, four separate UI/cursor demonstrations, official logo/Inter, and semantic app tokens.
 - Additive native Landing and Landing motion pages saved in design/kliseer.figcraft; saved document inspected with dirty=false. Eighteen landing exports exist. Hero desktop/mobile WebP assets were visually inspected and used by the responsive picture.
-- Historical Hivolts16/20 Tier S sample, four factors5/5/5/1, correct Moishy recipient/provider disclosure, source record/date, fictional Harborline disclosure, no pricing/testimonials/customer claims or automatic sending.
+- Historical Hivolts 16 / 20, Tier S, with score factors 5 / 5 / 5 / 1; a correctly attributed Moishy contact and source/date; and a disclosure that Harborline is fictional. No invented pricing, testimonials, customer claims or automatic sending.
 - Next /app basePath cutover, raw API/form/image/auth path updates, Caddy routing and guarded deployment instructions.
 
 ## Builds and checks exercised
@@ -14,9 +14,9 @@ Verified locally on November 8, 2026. No production deployment or remote configu
 - npm run check: all five suites passed (tier, account, contacts, chat-workspace, guest routing).
 - npm run check:landing passed. Motion compiler and Astro static build passed.
 - npm run build completed Next and Astro. Next production build was rerun successfully after the guest matcher correction.
-- Full ESLint: zero errors; two existing unused-parameter warnings in app/api/prospects/[id]/lookup/route.ts. Scoped ESLint for the changed proxy/regression test passed.
-- Native Caddy binary validated deploy/Caddyfile as a valid configuration. A temporary local Caddy served landing/dist and proxied the built Next application, rather than testing only framework dev output.
-- Impeccable detector reported only its generic Inter font warning. Inter is explicitly required by the brief, so it was retained.
+- Full `npm run lint` passed.
+- Caddy validated `deploy/Caddyfile`. Temporary local Caddy served the built Astro landing and proxied the production Next app.
+- The design detector flagged Inter as a generic-font warning; the user-selected font was kept.
 
 ## Browser scenarios exercised
 
@@ -33,12 +33,19 @@ Verified locally on November 8, 2026. No production deployment or remote configu
 | Four workflow sections | Each independently reached its final state on entering view |
 | Replay | Observed initial hidden file rows and visible cursor, then phase1 with visible rows |
 | Offscreen interruption | Active scene canceled to final readable state without replay on return |
-| Pause motion control | Document state paused; canvas running=false |
-| Hidden-document signal (fault injection) | visibilitychange handler stopped canvas (running true→false). Native browser tab-switch automation aborted, so this is not claimed as a real tab-switch test |
-| Keyboard | Tab reached skip link, brand, navigation, login and both hero actions; observed3px focus outlines |
-| Widths320/390/768/1440 | document scrollWidth matched viewport; no broken images. Desktop and390px screenshots inspected |
+| Motion pause button | Document state paused; all four scenes settled; WebGL `running=false`; Lenis root class removed (native scroll restored) |
+| Lenis wheel easing | A browser wheel input of 500 device px arrived as 400 CSS px; 16 animation-frame samples rose monotonically from 598 to 879 before settling at 960 |
+| Lenis anchor navigation | `#how-it-works` updated the fragment; the anchored heading moved from 910 px to 64 px over the smooth transition with Lenis active |
+| Reduced-motion stability | After 3 seconds, no active animations or cursor; workflow stayed final, Lenis was absent and WebGL stayed stopped |
+| Continuous workflows | All four independently completed two cursor/UI cycles while visible; moving away settled each to its static final state |
+| Cursor-tracking shader | Instrumented live WebGL `uLamp` followed the cursor from x=0.146 to x=0.806; motion smear was nonzero, the pixel sample changed by 5,380 and one click ripple was recorded |
+| Global pause | Pause stopped Lenis, all scene loops and WebGL; native scrolling remained available |
+| Hidden-document signal (fault injection) | `visibilitychange` stops canvas; native browser tab-switch automation is not claimed |
+| Keyboard | Tab reached skip link, brand, navigation, login and hero actions; focus outline3px |
+| Widths 320 / 390 / 768 / 1440 | Document scroll width matched each viewport; no broken images. Desktop and390px screenshots inspected |
 
 JavaScript-disabled DOM/readability checks passed; that scenario's screenshot helper timed out. No full assistive-technology audit or field performance benchmark is claimed.
+`q.tmp.ts` is an untouched local diagnostic importing a Linux-only deployed path (`/opt/kliseer/current/lib/db`); the root TypeScript build excludes only this temporary file. It was not executed.
 
 ## Routing regression found and fixed
 
