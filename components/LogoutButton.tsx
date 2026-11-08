@@ -11,8 +11,9 @@ export function LogoutButton() {
   return (
     <button
       type="button"
-      className="nav-item w-full cursor-pointer bg-transparent text-left"
       disabled={busy}
+      aria-label="Log out"
+      title="Log out"
       onClick={async () => {
         setBusy(true);
         await fetch('/api/auth/logout', { method: 'POST' }).catch(() => null);
@@ -20,7 +21,7 @@ export function LogoutButton() {
         router.refresh();
       }}
     >
-      <Icon name="logOut" />Log out
+      <Icon name="logOut" /><span className="nav-text">Log out</span>
     </button>
   );
 }

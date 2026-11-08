@@ -4,6 +4,7 @@ import { thread, type Tab } from '@/lib/chat';
 import { ensureSellerId, getViewer } from '@/lib/session';
 import { BrandLockup } from './BrandLockup';
 import { ChatPanel } from './ChatPanel';
+import { SidebarToggle } from './SidebarToggle';
 import { Icon, type IconName } from './Icon';
 import { LogoutButton } from './LogoutButton';
 
@@ -34,15 +35,18 @@ export async function Shell({ tab, sellerId, chat, setupStep, children }: Props)
   const viewer = await getViewer();
   const messages = chat ? await thread(sid, chat.tab) : [];
   return (
-    <div className="shell" style={chat ? undefined : { gridTemplateColumns: '212px minmax(0, 1fr)' }}>
+    <div className={`shell${chat ? '' : ' shell--home'}`}>
       <aside className="sidebar">
-        <Link href="/" className="brand" aria-label="Kliseer home"><BrandLockup size={28} /></Link>
+        <div className="sidebar-header">
+          <Link href="/" className="brand" aria-label="Kliseer home"><BrandLockup size={28} /></Link>
+          <SidebarToggle />
+        </div>
         <nav className="nav" aria-label="Main">
           {NAV.map((n, i) => (
             <div key={n.tab}>
               {i === 1 && <div className="nav-label">Workspace</div>}
-              <Link href={n.href} className="nav-item" aria-current={n.tab === tab ? 'page' : undefined}>
-                <Icon name={n.icon} />{n.label}
+              <Link href={n.href} className="nav-item" aria-label={n.label} title={n.label} aria-current={n.tab === tab ? 'page' : undefined}>
+                <Icon name={n.icon} /><span className="nav-text">{n.label}</span>
               </Link>
             </div>
           ))}
@@ -55,7 +59,7 @@ export async function Shell({ tab, sellerId, chat, setupStep, children }: Props)
         )}
         {/* G3: guest sees Log in, user sees Log out. */}
         <div className={setupStep ? 'py-3' : 'mt-auto py-3'}>
-          {viewer?.loggedIn ? <LogoutButton /> : <Link href="/login" className="nav-item"><Icon name="logIn" />Log in</Link>}
+          {viewer?.loggedIn ? <LogoutButton /> : <Link href="/login" aria-label="Log in" title="Log in" className="nav-item"><Icon name="logIn" /><span className="nav-text">Log in</span></Link>}
         </div>
       </aside>
       <main className="panel">{children}</main>
