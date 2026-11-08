@@ -1,10 +1,10 @@
 # Kliseer
 
-Sales-ops app for an electrical-supply seller. Public building permits become dated prospect signals. Tiers are deterministic. Chat only drafts the seller profile.
+Sales-ops app for an electrical-supply seller. Public building permits become dated prospect signals. Tiers are deterministic. Klise drafts setup fields; workspace chat uses current prospect and sourced-contact records for grounded answers.
 
 Track: Vultr Agent Rush, Powering the Future of Work. Seller profile in the demo is synthetic (Harborline). Permit signals are public records.
 
-Demo: https://64-177-42-81.sslip.io — HTTP Basic Auth. Credentials are not in the repo.
+Demo: https://64-177-42-81.sslip.io — open in guest mode or sign in.
 
 ## Vultr
 
@@ -19,6 +19,10 @@ A push to `main` runs CI, then deploys that commit to `/opt/kliseer/releases/<sh
 1. Setup: Company, ICP, Target, Review. The chat agent returns JSON drafts for fields the user named. Each section is approved on its own.
 2. Find prospects: companies with a permit signal in the last 365 days. Tier uses the last 90 days plus product-keyword matches (`S` / `A` / `B` / `C`).
 3. Open a prospect: dated signals, source, summary, matched keyword, source URL. Companies outside the seller region stay visible and are marked `Outside service region`.
+
+Guest workspaces start blank. Home offers **Load demo data** to copy the Harborline company, ICP, and target profile into a blank guest workspace. The demo uses current public-signal prospects and sourced contacts already in the database; it does not create fictional lead or contact records.
+
+Home and workspace chats receive the seller profile, the current top 20 Seer prospects, and sourced contact records. Chat can compare candidates, recommend a prospect, list available contacts, and identify top prospects without saved contacts. Those answers use database records; missing contact fields are never inferred. `New chat` creates a separate persistent conversation, and Home lists conversations by workspace.
 
 Sources: NYC DOB building permits, NYC DOB electrical permits, Austin commercial construction permits, Seattle electrical permits.
 

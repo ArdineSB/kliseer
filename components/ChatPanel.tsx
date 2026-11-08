@@ -8,6 +8,7 @@ import { Icon } from './Icon';
 
 type Props = {
   tab: Tab;
+  threadId: string;
   title?: string;
   placeholder: string;
   initial: ChatMessage[];
@@ -15,7 +16,7 @@ type Props = {
   home?: boolean;
 };
 
-export function ChatPanel({ tab, title, placeholder, initial, home }: Props) {
+export function ChatPanel({ tab, threadId, title, placeholder, initial, home }: Props) {
   const router = useRouter();
   const [messages, setMessages] = useState(initial);
   const [text, setText] = useState('');
@@ -37,11 +38,11 @@ export function ChatPanel({ tab, title, placeholder, initial, home }: Props) {
       setText('');
     }
     try {
-      const res = await fetch('/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ tab, message }) });
+      const res = await fetch('/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ tab, threadId, message }) });
       if (!res.ok) throw new Error();
       const r: { user: ChatMessage; assistant: ChatMessage; drafts: Record<string, unknown> } = await res.json();
       setMessages((m) => [...m.filter((x) => x.id > 0 && x.id !== r.user.id), r.user, r.assistant]);
-      if (Object.keys(r.drafts).length) router.refresh(); // pull new drafts into the setup form
+      router.refresh(); // refresh thread titles, Home history, and setup drafts
     } catch {
       setFailed(message); // the user message stays in the thread (stored server-side before the LLM call)
     } finally {

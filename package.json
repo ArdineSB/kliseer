@@ -10,7 +10,7 @@
     "lint": "eslint",
     "db:init": "tsx --env-file=.env.local scripts/db-init.ts",
     "ingest": "tsx --env-file=.env.local scripts/ingest.ts",
-    "check": "tsx scripts/tier.check.ts && tsx scripts/account.check.ts && tsx scripts/contacts.check.ts"
+    "check": "tsx scripts/tier.check.ts && tsx scripts/account.check.ts && tsx scripts/contacts.check.ts && tsx scripts/chat-workspace.check.ts"
   },
   "dependencies": {
     "next": "16.4.5",

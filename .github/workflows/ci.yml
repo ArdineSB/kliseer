@@ -76,6 +76,7 @@ jobs:
           ln -sfn /opt/kliseer/.env.local "$release/.env.local"
           cd "$release"
           npm ci
+          npm run db:init
           npm run build
           ln -sfn "releases/$1" /opt/kliseer/current.next
           mv -Tf /opt/kliseer/current.next "$current"

@@ -1,7 +1,7 @@
+import { defaultThread, thread, type Tab } from '@/lib/chat';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { thread, type Tab } from '@/lib/chat';
 import { ensureSellerId, getViewer } from '@/lib/session';
 import { BrandLockup } from './BrandLockup';
 import { ChatPanel } from './ChatPanel';
@@ -34,7 +34,8 @@ export async function Shell({ tab, sellerId, chat, setupStep, children }: Props)
   // Pages that resolved the viewer pass sellerId; Shell resolves (and lazily creates) a guest otherwise.
   const sid = sellerId ?? (await ensureSellerId());
   const viewer = await getViewer();
-  const messages = chat ? await thread(sid, chat.tab) : [];
+  const threadId = chat ? await defaultThread(sid, chat.tab) : undefined;
+  const messages = chat && threadId ? await thread(sid, chat.tab, threadId) : [];
   return (
     <div className={`shell${chat ? '' : ' shell--home'}`}>
       <aside className="sidebar">
@@ -67,7 +68,7 @@ export async function Shell({ tab, sellerId, chat, setupStep, children }: Props)
         </div>
       </aside>
       <main className="panel">{children}</main>
-      {chat && <ChatPanel tab={chat.tab} title={chat.title} placeholder={chat.placeholder} initial={messages} />}
+      {chat && threadId && <ChatPanel key={threadId} tab={chat.tab} threadId={threadId} title={chat.title} placeholder={chat.placeholder} initial={messages} />}
     </div>
   );
 }

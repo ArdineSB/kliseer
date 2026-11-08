@@ -1,3 +1,4 @@
+import { GUEST_DEMO_SELLER } from './session';
 import { sql } from './db';
 import type { FieldValue, Section, Seller, Status } from './fields';
 
@@ -5,6 +6,26 @@ export async function getSeller(id: number): Promise<Seller> {
   const [s] = await sql<Seller[]>`select id, company, icp, target, status, sources from sellers where id = ${id}`;
   if (!s) throw new Error(`Seller ${id} missing.`);
   return s;
+}
+
+/** Copy the read-only Harborline case-study profile into a blank guest workspace. */
+export async function loadGuestDemo(sellerId: number): Promise<Seller | null> {
+  const [seller] = await sql<Seller[]>`
+    update sellers guest set
+      company = demo.company,
+      icp = demo.icp,
+      target = demo.target,
+      status = '{"company":"draft","icp":"draft","target":"draft"}'::jsonb,
+      sources = '{}'::jsonb,
+      updated_at = now()
+    from sellers demo
+    where guest.id = ${sellerId}
+      and guest.user_id is null
+      and guest.guest_token_hash is not null
+      and guest.company = '{}'::jsonb and guest.icp = '{}'::jsonb and guest.target = '{}'::jsonb
+      and demo.id = ${GUEST_DEMO_SELLER}
+    returning guest.id, guest.company, guest.icp, guest.target, guest.status, guest.sources`;
+  return seller ?? null;
 }
 
 /**

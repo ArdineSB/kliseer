@@ -33,15 +33,34 @@ create table if not exists signals (
 );
 create index if not exists signals_company_date on signals(company_id, signal_date desc);
 create index if not exists signals_date on signals(signal_date desc);
+create table if not exists chat_threads (
+  id uuid primary key default gen_random_uuid(),
+  seller_id int not null references sellers(id) on delete cascade,
+  tab text not null,
+  is_default boolean not null default false,
+  title text not null default '',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create unique index if not exists chat_threads_default on chat_threads(seller_id, tab) where is_default;
+create index if not exists chat_threads_seller_updated on chat_threads(seller_id, updated_at desc);
 create table if not exists chat_messages (
   id serial primary key,
   seller_id int not null references sellers(id),
   tab text not null,
   role text not null check (role in ('user','assistant')),
   content text not null,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  thread_id uuid references chat_threads(id) on delete cascade
 );
-create index if not exists chat_messages_thread on chat_messages(seller_id, tab, id);
+alter table chat_messages add column if not exists thread_id uuid references chat_threads(id) on delete cascade;
+insert into chat_threads (seller_id, tab, is_default)
+select seller_id, tab, true from chat_messages where thread_id is null group by seller_id, tab
+on conflict (seller_id, tab) where is_default do nothing;
+update chat_messages m set thread_id = t.id
+from chat_threads t where m.thread_id is null and t.seller_id = m.seller_id and t.tab = m.tab and t.is_default;
+alter table chat_messages alter column thread_id set not null;
+create index if not exists chat_messages_by_thread on chat_messages(seller_id, thread_id, id);
 
 -- Auth and guest (grill 7 Nov). Existing seller rows stay: no guest_token_hash, so purge cannot delete them.
 create table if not exists users (
@@ -92,3 +111,13 @@ create table if not exists email_drafts (
   updated_at timestamptz not null default now(),
   unique (seller_id, company_id)
 );
+-- Auto-lookup quota: Free tier 5 per seller per calendar month (KLISEER_BUILD_PLAN_2.md).
+create table if not exists contact_lookups (
+  id serial primary key,
+  seller_id int not null references sellers(id) on delete cascade,
+  company_id int not null references companies(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  found int not null default 0,
+  note text
+);
+create index if not exists contact_lookups_seller on contact_lookups(seller_id, created_at);
